@@ -12,4 +12,27 @@
     height: 100vh;
 
   }
+  .container{
+      width: 50%;
+    }
+    @media(max-width: 966px) {
+      .container{
+        width: 90%;
+      }
+    }
+    .color{
+      color: rgb(105, 101, 105);
+    }
+    .tamanho-button{
+        margin-left: 6%;
+        width: 40%;
+    }
+    h1{
+        text-align: center;
+    }
+    .logo{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
