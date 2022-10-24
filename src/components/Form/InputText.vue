@@ -1,29 +1,15 @@
 <template>
     <label for="usuario">Usuário:</label>
-    <input class="form-control mt-2" type="text" :value="matricula">
-    <label for="senha">Senha:</label>
-    <div class="input-group mb-3">
-        <input :type="type" class="form-control" aria-label="Senha" aria-describedby="basic-addon1" :value="senhaUsuario">
-        <button class="btn btn-outline-secondary" type="button" v-on:click="trocar">
-            <svg xmlns="http://www.w3.org/2000/svg" v-if="olho" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" v-else width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
-            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
-            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
-            </svg>
-        </button>
-    </div>
-    <div>
-        <input class="form-check-input mb-3" type="checkbox" name="ManterConectado" value="ManterConectado"> Manter conectado
-    </div>
-    <a href="#" class="mt-2" >Esqueceu a senha?</a>
+    <input class="form-control mt-2 mb-4" type="text" :value="modelValue" @input="updateValue" >
 </template>
 
 <script>
     export default {
         name:'InputText',
+        props:{
+            modelValue: [String, Number], //fazer meu componente inputSenha  comunicar com o pai e filho  modelValue é uma palavra reservada para pegar o valor value do input
+            name: [String]
+        },
         data(){
             return{
                 olho: true,
@@ -32,8 +18,11 @@
         },
         methods: {
             trocar: function (event) {
-                this.olho = !this.olho
-                this.type == 'password' ? this.type = 'text' : this.type = 'password'
+                this.olho = !this.olho // trocando o icone do olho ao clicar em cima para o oposto
+                this.type == 'password' ? this.type = 'text' : this.type = 'password' // exibe a senha ou esconde ela mudando o type dela de text para password
+            },
+            updateValue(event){
+                this.$emit("update:modelValue", event.target.value) // está atulizando o value de acordo com o que está sendo digitado
             }
 
         }
