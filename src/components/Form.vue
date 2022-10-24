@@ -4,8 +4,9 @@
         <hr>
         <form action="" @submit.prevent="fazerLogin()" >
             <div>
-                <InputText v-model="matriculaUsuario" />
-                <InputSenha v-model="senhaUsuario" :verificar="'form-control'" />
+                <InputText v-model="matriculaUsuario" :verificar="class" />
+                <label for="senha" class="mb-2">Senha:</label>
+                <InputSenha v-model="senhaUsuario" :verificar="class" />
             </div>
             <input type="checkbox"> Lembrar a senha
             <div>
@@ -35,29 +36,32 @@
         data(){
             return {
                 senhaUsuario: '',
-                matriculaUsuario: ''
+                matriculaUsuario: '',
+                class:'form-control'
             }
         },
         methods: {
             async fazerLogin(){
-                console.log(`Matricula: ${this.matriculaUsuario}`)
-                console.log(`Senha: ${this.senhaUsuario}`)
-                // const q = query(collection(db, "Usuarios"), where("email", "==", this.matricula));
+                let email;
+                const q = query(collection(db, "Usuarios"), where("matricula", "==", this.matriculaUsuario));
+                const resultado = await getDocs(q);
                 
-                // const querySnapshot = await getDocs(q);
-                // querySnapshot.forEach((doc) => {
-                //     const email = doc.email;
-                //     return email;
-                // });
+                resultado.forEach((doc) => {
+                    const matricula = doc.data().matricula
+                    if (matricula == this.matriculaUsuario) {
+                        email = doc.data().email
+                    }
+                });
 
-                // signInWithEmailAndPassword(auth, email, this.senhaUsuario)
-                // .then((userCredential) => {
-                //     const user = userCredential.user;
-                // })
-                // .catch((error) => {
-                //     const errorCode = error.code;
-                //     const errorMessage = error.message;
-                // });
+                await signInWithEmailAndPassword(auth, email, this.senhaUsuario)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                })
+                .catch((error) => {
+                    this.class = 'form-control is-invalid'
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                });
             }
         }
     }
