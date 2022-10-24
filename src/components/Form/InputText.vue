@@ -1,9 +1,9 @@
 <template>
     <label for="usuario">Usuário:</label>
-    <input class="form-control mt-2" type="text">
+    <input class="form-control mt-2" type="text" :value="matricula">
     <label for="senha">Senha:</label>
     <div class="input-group mb-3">
-        <input :type="type" class="form-control" aria-label="Senha" aria-describedby="basic-addon1">
+        <input :type="type" class="form-control" aria-label="Senha" aria-describedby="basic-addon1" :value="senhaUsuario">
         <button class="btn btn-outline-secondary" type="button" v-on:click="trocar">
             <svg xmlns="http://www.w3.org/2000/svg" v-if="olho" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                 <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
@@ -27,7 +27,7 @@
         data(){
             return{
                 olho: true,
-                type: 'password'
+                type: 'password',
             }
         },
         methods: {

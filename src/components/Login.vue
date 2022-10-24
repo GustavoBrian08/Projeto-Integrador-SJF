@@ -14,8 +14,8 @@
     export default {
         name: 'Login',
         components: {
-        PrimeiroComponente,
-        Form
+            PrimeiroComponente,
+            Form
         }
     }
 </script>

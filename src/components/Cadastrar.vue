@@ -56,9 +56,11 @@
 <script>
   import app from './firebase/index'
   import ValidarTexto from './validation/validation'
-  import { getFirestore, addDoc, collection} from "firebase/firestore";
+  import { getFirestore, addDoc, collection } from "firebase/firestore";
+  import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
   import InputSenha from './Form/InputSenha.vue';
   const db = getFirestore(app);
+  const auth = getAuth(app);
   const validação = new ValidarTexto()
   const emailRegex = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{1,3})+$/
   
@@ -75,10 +77,10 @@
               confirmaSenha: 'form-control'
             },
             usuario: {
-            matricula: '',
-            nome: '',
-            email: '',
-            turma: '',
+              matricula: '',
+              nome: '',
+              email: '',
+              turma: '',
             },
             senha: '',
             confirmarSenha: '',
@@ -142,6 +144,16 @@
               console.log('Usuario cadastrado com sucesso!')
               try {
                 const docRef = await addDoc(collection(db, "Usuarios"), this.usuario);
+
+                createUserWithEmailAndPassword(auth, this.usuario.email, this.senha)
+                .then((userCredential) => {
+                  const user = userCredential.user;
+                })
+                .catch((error) => {
+                  const errorCode = error.code;
+                  const errorMessage = error.message;
+                });
+
                 this.$router.push({ name: "home" })
               } catch (e) {
                 console.error("Error adding document: ", e);
