@@ -1,4 +1,5 @@
 <template>
+    
     <div class="container card rounded">
       
       <div class="card-body">
@@ -50,7 +51,8 @@
           </form>
 
         </div>
-  </div>
+      </div>
+      <Loading :display="loading" />
 </template>
 
 <script>
@@ -59,6 +61,7 @@
   import { getFirestore, addDoc, collection } from "firebase/firestore";
   import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
   import InputSenha from './Form/InputSenha.vue';
+  import Loading from './Loading.vue'
   const db = getFirestore(app);
   const auth = getAuth(app);
   const validação = new ValidarTexto()
@@ -85,12 +88,14 @@
             senha: '',
             confirmarSenha: '',
             erros: [],
-            name: ''
+            name: '',
+            loading: 'display: none'
 
           }
         },
         components:{
-          InputSenha
+          InputSenha,
+          Loading
         },
         methods: {
           tamanhoMatricula(){
@@ -120,7 +125,7 @@
             this.name = 'A senha deve ter no mínimo 8 caracteres'
           },
           senhas(){
-            if (this.senha != this.confirmarSenha){
+            if (this.senha != this.confirmarSenha || this.senha == ''){
               this.validarCampos.confirmaSenha = 'form-control is-invalid'
               this.name = 'As senhas não são iguais'
             }else{
@@ -129,8 +134,9 @@
 
           },
           async cadastrarUsuario(){
+            
+            this.loading = 'display: block'
             this.erros = []
-
             if (this.usuario.matricula == '' || this.usuario.nome == '' || this.usuario.email == '' || !this.usuario.email.includes('@') || this.usuario.turma == '' || this.senha == '' || this.confirmarSenha == '') this.erros.push('campos vazios')
             if (this.usuario.matricula.length < 13 ||this.usuario.nome.length < 3 || this.usuario.turma.length < 3 || this.senha.length < 8) this.erros.push('pouco caracteres')
             if (this.senha != this.confirmarSenha) {
@@ -139,8 +145,17 @@
               this.confirmarSenha = ''
             }
             if (this.erros.length > 0){
+              this.loading = 'display: none'
+              this.tamanhoMatricula()
+              this.tamanhoNome()
+              this.validarEmail()
+              this.tamanhoTurma()
+              this.tamanhoSenha()
+              this.senhas()
               console.log('deu erro')
             }else{
+              this.loading = 'display: block'
+              
               console.log('Usuario cadastrado com sucesso!')
               try {
                 const docRef = await addDoc(collection(db, "Usuarios"), this.usuario);
@@ -155,6 +170,10 @@
                 });
 
                 this.$router.push({ name: "home" })
+                setTimeout(() => {
+                  this.emitter.emit('alert-cadastro', {'success': 'display: block'})  
+                }, 300);
+                this.loading = ''
               } catch (e) {
                 console.error("Error adding document: ", e);
               }
@@ -166,4 +185,3 @@
         }
     }
 </script>
-
