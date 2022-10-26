@@ -1,16 +1,15 @@
 <template>
     
-    <div class="container card rounded">
-      
+    <div class="container card rounded"> 
       <div class="card-body">
-        <div class="logo">
-          <img src="@/assets/ifpiLogo.png" alt="logo">
-        </div>
-        
-        <form form-control >
+        <div class="d-flex justify-content-center mt-4 mb-4">
           <h1 class="mt-4">Cadastro</h1>
+          <img src="@/assets/ifpiLogo.png" style="width: 120px;" alt="logo">
+        </div>
+        <form form-control >
+          <p class="alert alert-danger" :style="danger">{{msg}}</p>
           <div>
-            <label for="matricula" class="mt-4">Matricula:</label>
+            <label for="matricula">Matricula:</label>
               <input :class="validarCampos.tamanho" @input="tamanhoMatricula()" v-model="usuario.matricula" type="text" required>
               <div class="invalid-feedback">
                 Porfavor insira uma matrícula válida.
@@ -53,12 +52,13 @@
         </div>
       </div>
       <Loading :display="loading" />
+      
 </template>
 
 <script>
   import app from './firebase/index'
   import ValidarTexto from './validation/validation'
-  import { getFirestore, addDoc, collection } from "firebase/firestore";
+  import { getFirestore, collection, query, where, getDocs, addDoc } from "firebase/firestore";
   import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
   import InputSenha from './Form/InputSenha.vue';
   import Loading from './Loading.vue'
@@ -89,7 +89,9 @@
             confirmarSenha: '',
             erros: [],
             name: '',
-            loading: 'display: none'
+            loading: 'display: none',
+            danger: 'display: none',
+            msg: ''
 
           }
         },
@@ -108,6 +110,7 @@
             this.validarCampos.nome = resultado
           },
           validarEmail(){
+            
             if (emailRegex.test(this.usuario.email)){
               this.validarCampos.email = 'form-control mt-2 is-valid'
             }else{
@@ -115,6 +118,7 @@
             } 
           },
           tamanhoTurma(){
+            
             let resultado = validação.validarTamanho(this.usuario.turma,this.validarCampos.turma, 'nome') // verifica o tamanho do campo matricula
             this.validarCampos.turma = resultado
 
@@ -134,7 +138,7 @@
 
           },
           async cadastrarUsuario(){
-            
+
             this.loading = 'display: block'
             this.erros = []
             if (this.usuario.matricula == '' || this.usuario.nome == '' || this.usuario.email == '' || !this.usuario.email.includes('@') || this.usuario.turma == '' || this.senha == '' || this.confirmarSenha == '') this.erros.push('campos vazios')
@@ -143,7 +147,17 @@
               this.erros.push('senha diferentes')
               this.senha = ''
               this.confirmarSenha = ''
-            }
+            } 
+            let email;
+            const q = query(collection(db, "Usuarios"), where("matricula", "==", this.usuario.matricula));
+            const resultado = await getDocs(q);
+            resultado.forEach((doc) => {
+              const matricula = doc.data().matricula
+              if (matricula == this.usuario.matricula) {
+                email = true
+              }
+            });
+            if (email == undefined) email = false
             if (this.erros.length > 0){
               this.loading = 'display: none'
               this.tamanhoMatricula()
@@ -152,11 +166,31 @@
               this.tamanhoTurma()
               this.tamanhoSenha()
               this.senhas()
-              console.log('deu erro')
+            }if(email == true){
+              this.loading = 'display: none'
+              this.msg = "Usuário já está cadastrado"
+              this.danger = 'display: block'
+                setTimeout(()=>{
+                  this.danger = 'display: none'
+                },8000)
+                this.usuario = {
+                  matricula: '',
+                  nome: '',
+                  email: '',
+                  turma: '',
+                }
+                this.senha = ''
+                this.confirmarSenha = ''
+                this.validarCampos ={
+              tamanho: 'form-control mt-2',
+              nome: 'form-control mt-2',
+              email: 'form-control mt-2',
+              turma: 'form-control mt-2',
+              senha: 'form-control',
+              confirmaSenha: 'form-control'
+            }
             }else{
               this.loading = 'display: block'
-              
-              console.log('Usuario cadastrado com sucesso!')
               try {
                 const docRef = await addDoc(collection(db, "Usuarios"), this.usuario);
 
@@ -168,20 +202,42 @@
                   const errorCode = error.code;
                   const errorMessage = error.message;
                 });
-
+                this.emitter.emit('alert-cadastro', true)
                 this.$router.push({ name: "home" })
-                setTimeout(() => {
-                  this.emitter.emit('alert-cadastro', {'success': 'display: block'})  
-                }, 300);
-                this.loading = ''
+                this.loading = 'display: none'
               } catch (e) {
+                this.loading = 'display: none'
+                this.msg = 'Houve um erro interno'
+                this.danger = 'display: block'
+                setTimeout(()=>{
+                  this.danger = 'display: none'
+                },8000)
+                this.usuario = {
+                  matricula: '',
+                  nome: '',
+                  email: '',
+                  turma: '',
+                }
+                this.senha = ''
+                this.confirmarSenha = ''
+                this.validarCampos ={
+              tamanho: 'form-control mt-2',
+              nome: 'form-control mt-2',
+              email: 'form-control mt-2',
+              turma: 'form-control mt-2',
+              senha: 'form-control',
+              confirmaSenha: 'form-control'
+            }
                 console.error("Error adding document: ", e);
               }
             }
           }
         },
         created(){
+          localStorage.clear()
           // this.cadastrarUsuario();
         }
     }
 </script>
+
+st

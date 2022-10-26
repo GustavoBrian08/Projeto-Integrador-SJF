@@ -11,9 +11,9 @@
                 <label for="senha" class="mb-2">Senha:</label>
                 <InputSenha v-model="senhaUsuario" :verificar="classe" />
             </div>
-            <input type="checkbox"> Lembrar a senha
+            <input class="form-check-input" type="checkbox"> Lembrar a senha?
             <div>
-                <a href="#">Esqueceu a senha?</a>
+                <a class="link-dark" href="#">Esqueceu a senha?</a>
             </div>
             <div><Submit /></div>
         </form>

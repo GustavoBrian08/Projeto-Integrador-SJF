@@ -1,12 +1,12 @@
 <template>
-    <div class="logo">
-        <img src="@/assets/ifpiLogo.png" alt="logo">
-    </div>
-    <div class="cento mt-4">
-        <h1 style="margin:0%;">SJF</h1>
-        <p style="margin:0%;">sistema de</p>
-        <p style="margin:0%;">justificação</p>
-        <p>de faltas</p>
+    <div class="d-flex justify-content-evenly mt-4 mb-4">
+        <div class="cento">
+            <h1 style="margin:0%;">SJF</h1>
+            <p style="margin:0%;">sistema de</p>
+            <p style="margin:0%;">justificação</p>
+            <p>de faltas</p>
+        </div>
+        <img src="@/assets/ifpiLogo.png" class="mt-2" style="width: 125px; height: 110px;" alt="logo">
     </div>
 </template>
 
@@ -26,13 +26,5 @@
     .cento{
         text-align: center;
         font-family: 'Inder', sans-serif;
-    }
-    .logo{
-        margin-top: 25px;
-        width: 120px;
-        float: right;
-    }
-    img{
-        width: 100%;
     }
 </style>
