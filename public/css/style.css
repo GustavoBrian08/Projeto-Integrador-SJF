@@ -1,21 +1,20 @@
 input[type="file"] {
-    display: none;
+    display: block;
 }
 
-.img{
-   margin-top: 20px;
-   width: 400px;
-   aspect-ratio: 16/9;
-   background: #ddd;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   color: #aaa;
-   border: 2px dashed currentColor;
-   cursor: pointer;
-   font-family: sans-serif;
-   transition: color 300ms ease-in-out, background 300ms ease-in-out;
-
+.img {
+    margin-top: 20px;
+    width: 400px;
+    aspect-ratio: 16/9;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    border: 2px dashed currentColor;
+    cursor: pointer;
+    font-family: sans-serif;
+    transition: color 300ms ease-in-out, background 300ms ease-in-out;
 }
 
 .img:hover {
@@ -34,6 +33,5 @@ input[type="file"] {
 }
 
 .arquivo__img {
-    
     max-width: 100%;
 }
