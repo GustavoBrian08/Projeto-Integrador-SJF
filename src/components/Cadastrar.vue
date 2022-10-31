@@ -166,7 +166,7 @@
               this.tamanhoTurma()
               this.tamanhoSenha()
               this.senhas()
-            }if(email == true){
+            }else if(email == true){
               this.loading = 'display: none'
               this.msg = "Usuário já está cadastrado"
               this.danger = 'display: block'
