@@ -1,8 +1,9 @@
 <template>
     
-    <div class="container card rounded"> 
+    <div class="container card rounded "> 
       <div class="card-body">
-        <div class="d-flex justify-content-center mt-4 mb-4">
+        <div class="d-flex justify-content-between mt-4 mb-4">
+          <div style="width: 50px;"></div>
           <h1 class="mt-4">Cadastro</h1>
           <img src="@/assets/ifpiLogo.png" style="width: 120px;" alt="logo">
         </div>

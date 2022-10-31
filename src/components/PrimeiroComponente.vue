@@ -1,5 +1,6 @@
 <template>
-    <div class="d-flex justify-content-evenly mt-4 mb-4">
+    <div class="d-flex d-flex justify-content-between mt-4 mb-4">
+        <div style="width: 50px;"></div>
         <div class="cento">
             <h1 style="margin:0%;">SJF</h1>
             <p style="margin:0%;">sistema de</p>
