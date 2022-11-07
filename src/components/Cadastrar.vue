@@ -1,6 +1,6 @@
 <template>
     
-    <div class="container card rounded "> 
+    <div class="container card rounded"> 
       <div class="card-body">
         <div class="d-flex justify-content-between mt-4 mb-4">
           <div style="width: 50px;"></div>
@@ -85,6 +85,7 @@
               nome: '',
               email: '',
               turma: '',
+              anexos: '',
             },
             senha: '',
             confirmarSenha: '',

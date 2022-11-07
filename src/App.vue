@@ -13,9 +13,30 @@
   .container{
       width: 50%;
     }
-    @media(max-width: 966px) {
+    @media screen and (max-width: 1024px) {
+      .container{
+        width: 80%;
+      }
+    }
+    @media screen and (max-width: 966px) {
       .container{
         width: 90%;
+      }
+    }
+    @media screen and (max-width: 400px) {
+      .container{
+        width: 95%;
+      }
+    }
+    @media screen and (max-width: 300px) {
+      .container{
+        width: 100%;
+      }
+      h3{
+        font-size: 15px;
+      }
+      .d-flex{
+        width: 100%;
       }
     }
     .color{
