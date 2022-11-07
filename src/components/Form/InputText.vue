@@ -1,6 +1,6 @@
 <template>
-    <label for="usuario">Matrícula:</label>
-    <input :class="`${verificar} mt-2 mb-2`" type="text" :value="modelValue" @input="updateValue" >
+    <label for="usuario">{{label}}</label>
+    <input :class="`${verificar} mt-2 mb-2 `" type="text" :value="modelValue" @input="updateValue" >
 </template>
 
 <script>
@@ -8,6 +8,7 @@
         name:'InputText',
         props:{
             verificar: String,
+            label: String,
             modelValue: [String, Number], //fazer meu componente inputSenha  comunicar com o pai e filho  modelValue é uma palavra reservada para pegar o valor value do input
             name: [String]
         },

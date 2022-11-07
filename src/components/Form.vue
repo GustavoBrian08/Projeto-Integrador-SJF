@@ -7,7 +7,7 @@
         </div>
         <form action="" @submit.prevent="fazerLogin()" >
             <div>
-                <InputText v-model="matriculaUsuario" :verificar="classe" />
+                <InputText v-model="matriculaUsuario" label="Matricula: " :verificar="classe" />
                 <label for="senha" class="mb-2">Senha:</label>
                 <InputSenha v-model="senhaUsuario" :verificar="classe" />
             </div>
