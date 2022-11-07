@@ -47,6 +47,7 @@
         },
         methods: {
             async fazerLogin(){
+                this.emitter.emit('my-event', {'loading': 'display: block'})
                 let email;
                 const q = query(collection(db, "Usuarios"), where("matricula", "==", this.matriculaUsuario));
                 const resultado = await getDocs(q);
@@ -57,10 +58,11 @@
                         email = doc.data().email
                     }
                 });
-                this.emitter.emit('my-event', {'loading': 'display: block'})
                 await signInWithEmailAndPassword(auth, email, this.senhaUsuario)
                 .then((userCredential) => {
                     const user = userCredential.user;
+                    console.log(user)
+                    this.$router.push({ name: "justificar" })
                     this.emitter.emit('my-event', {'loading': 'display: none'})
                 })
                 .catch((error) => {
