@@ -1,37 +1,92 @@
-input[type="file"] {
-    display: block;
+
+.responsive{
+    width: 98%;
+    margin-left: 10px;
+}
+.btn-L{
+    height: 25%;
+    margin-left: 10px;
+    margin-top: 24px;
 }
 
-.img {
-    margin-top: 20px;
-    width: 400px;
-    aspect-ratio: 16/9;
-    background: #ddd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #aaa;
-    border: 2px dashed currentColor;
-    cursor: pointer;
-    font-family: sans-serif;
-    transition: color 300ms ease-in-out, background 300ms ease-in-out;
+.inputWithIcon input[type=text]{
+    padding-left: 38px
 }
 
-.img:hover {
-    color: #777;
-    background: #ccc;
+.inputWithIcon{
+    position: relative;
 }
 
-.img:active {
-    border-color: blue;
-    color: #aaa;
-    background: #ddd;
+.inputWithIcon i{
+    position: absolute;
+    left: 0;
+    top: -1px;
+    padding: 9px 8px;
+    transition: .3s;
+}
+.table-L {
+  overflow-x: auto;
 }
 
-.img:focus {
-    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+.over {
+  overflow-y: auto;
 }
 
-.arquivo__img {
-    max-width: 100%;
+.bloco {
+
+  width: 100vw;
+  height: 100vh;
 }
+
+.inputWithIcon input[type=text]:focus + i{
+    color: dodgerblue;
+}
+
+
+@media screen and (max-width: 1024px) {
+    .responsive{
+      width: 98%;
+      margin-left: 10px;
+    }
+  }
+  @media screen and (max-width: 966px) {
+    .responsive{
+      width: 98%;
+      margin-left: 10px;
+    }
+  }
+  @media screen and (max-width: 544px) {
+    .responsive{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-left: 0;
+    }
+    h3{
+        text-align: center;
+      }
+    .form-control-L{
+        width: 400%;
+    }
+    .input-group{
+        width: 100%;
+    }
+    .btn-L{
+        display: flex;
+        justify-content: center;
+        margin-left: 0;
+        
+    }
+  }
+  @media screen and (max-width: 300px) {
+    .responsive{
+      width: 100%;
+    }
+    h3{
+      text-align: center;
+    }
+    .responsive{
+      width: 100%;
+    }
+  }
+

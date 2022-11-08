@@ -1,5 +1,5 @@
 <template>
-    <div class="Justificar">
+    <div class="Justificar bg-white">
       
       <JustificarFaltas />
     </div>
@@ -11,7 +11,7 @@
   
   
   export default{
-    name: 'CadastroView',
+    name: 'JustificarView',
     components: {
         JustificarFaltas
     }

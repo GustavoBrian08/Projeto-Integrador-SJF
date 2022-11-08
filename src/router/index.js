@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 
 const routes = [{
         path: '/',
-        name: 'home',
+        name: 'login',
         component: HomeView
     },
     {
@@ -20,6 +20,11 @@ const routes = [{
         name: 'justificar',
         component: () =>
             import ( /* webpackChunkName: "about" */ '../views/JustificarFaltasView.vue')
+    }, {
+        path: '/historico-de-justificativas',
+        name: 'historicoDeJustificativas',
+        component: () =>
+            import ( /* webpackChunkName: "about" */ '../views/HistoricoDeJustificatiasView.vue')
     },
 ]
 

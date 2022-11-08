@@ -21,7 +21,7 @@
                 </div>
                 <div class="d-flex flex-column mt-2 mb-2">
                     <label for="formFileMultiple" class="form-label">Anexar atestado:</label>
-                    <input :class="validarCampos.anexo" @input="pegar" type="file" required accept="image/*, application/pdf" id="formFileMultiple" multiple>
+                    <input :class="validarCampos.anexo" @input="pegar" type="file"  id="formFileMultiple" multiple accept="image/*, application/pdf" required>
                 </div>
                 <div class="d-flex justify-content-end mw-100 f">
                     <input type="submit" @click.prevent="validarCampo()" value="Enviar" class="btn btn-success mt-2 mb-2 mw-100">

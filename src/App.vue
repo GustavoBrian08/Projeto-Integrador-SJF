@@ -32,9 +32,7 @@
       .container{
         width: 100%;
       }
-      h3{
-        font-size: 15px;
-      }
+      
       .d-flex{
         width: 100%;
       }
