@@ -6,11 +6,11 @@
                 <p class="alert alert-success" :style="success">Justificativa enviada com sucesso!</p>
                 <p class="alert alert-danger" :style="danger">{{msg}}</p>
                 <div class="d-flex flex-row justify-content-between flex-wrap">
-                    <div class="d-flex flex-column align-items-center mw-100">
+                    <div class="d-flex flex-column input-Date ">
                         <label for="inicio">Data inicial: </label>
                         <input :class="validarCampos.dataInicio" @input="limparCampo()" v-model="dataInicio" type="date" name="datainicio" id="datainicio" required>
                     </div>
-                    <div class="d-flex flex-column align-items-center mw-100">
+                    <div class="d-flex flex-column input-Date">
                         <label for="fim">Data final: </label>
                         <input :class="validarCampos.dataFim" @input="limparCampo()" v-model="dataFim" type="date" name="datafim" id="datafim" required>
                     </div>
@@ -37,7 +37,7 @@
 import app from './firebase/index'
 import ValidarTexto from './validation/validation'
 import { getStorage, ref, uploadBytes, listAll  } from "firebase/storage";
-import { doc, getFirestore, collection, query,updateDoc ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
+import { doc, getFirestore, collection, query,updateDoc, increment ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Loading from './Loading.vue';
 const validação = new ValidarTexto()
@@ -86,9 +86,16 @@ const listRef = ref(storage, 'anexos/');
             } // está verificando se o campo de data inicio é menor que a data final
             if (this.dataInicio.length == 0) this.validarCampos.dataInicio = 'form-control is-invalid' // está verificando se o campo de data está preenchido
             if (this.dataFim.length == 0) this.validarCampos.dataFim = 'form-control is-invalid' // está verificando se o campo de data está preenchido
-            if (this.desc.length < 10) this.validarCampos.desc = 'form-control is-invalid' // está verificando se o campo de descrição está com pelo menos 10 caracteres
-            if(this.anexo == 0) this.validarCampos.anexo = 'form-control is-invalid' // está verificando se foi anexado algum arquivo
-            if (this.dataInicio.length !=0 && this.dataFim.length != 0 && this.desc.length != 0 && this.anexo != 0 && this.dataInicio < this.dataFim){
+            if (this.desc.length == 0 && this.anexo == 0) {
+                this.validarCampos.desc = 'form-control is-invalid'
+                this.validarCampos.anexo = 'form-control is-invalid'
+                this.msg = 'Preencha pelo menos um dos campos que está vazio'
+                this.danger = 'display: block'
+                setTimeout(()=>{
+                    this.danger = 'display: none'
+                },10000)
+            }
+            if (this.dataInicio.length !=0 && this.dataFim.length != 0 && this.desc.length != 0 && this.anexo == 0 || this.desc.length == 0 && this.anexo != 0 && this.dataInicio < this.dataFim){
                 this.loading = 'display: block'
                 this.atestados = []
                 // fazendo upload de todos arquivos anexados
@@ -100,14 +107,26 @@ const listRef = ref(storage, 'anexos/');
                 }
                 // pegando o id do usuario que está logado para adicionar a justificativa de falta que foi feita agora
                 let id;
+                let name;
+                let index = 0
                 const q = query(collection(db, "Usuarios"), where("email", "==", this.email));
                 const resultado = await getDocs(q);
                 resultado.forEach((doc) => {
                   id = doc.id
+                  name = doc.data().nome
+                  try{
+                    index = doc.data().anexos.length
+                  }
+                  catch(err)  {
+                    // console.log(err)
+                  }
+                  index +=1
+                  index = index.toString()
+                  console.log(id)
                 });
                 const userRef = doc(db, "Usuarios", id);
                 await updateDoc(userRef, {
-                    anexos: arrayUnion({descricao: this.desc, dataInicio: this.dataInicio, dataFinal: this.dataFim, anexos: this.atestados})
+                    anexos: arrayUnion({ID: index, assunto: 'Justificativa', situacao: 'Andamento', responsavel: 'Coordenador' , nome: name,descricao: this.desc, dataInicio: this.dataInicio, dataFinal: this.dataFim, anexos: this.atestados})
                 });
                 this.loading = 'display: none'
                 this.success = 'display: block'
@@ -164,7 +183,7 @@ const listRef = ref(storage, 'anexos/');
                     const uid = user.uid;
                     this.email = email
                 } else {
-                    this.$router.push({ name: "home" })
+                    this.$router.push({ name: "login" })
                 }
                 });
         }

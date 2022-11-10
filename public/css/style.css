@@ -9,7 +9,7 @@
     margin-top: 24px;
 }
 
-.inputWithIcon input[type=text]{
+.inputWithIcon input[type=search]{
     padding-left: 38px
 }
 
@@ -26,7 +26,17 @@
 }
 .table-L {
   overflow-x: auto;
+  text-align: center;
 }
+
+.input-Date {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  width: 45%;
+}
+
+
 
 .over {
   overflow-y: auto;
@@ -61,6 +71,15 @@
         flex-direction: column;
         width: 100%;
         margin-left: 0;
+    }
+    .form-select-L{
+      width: 400%;
+    }
+    .input-Date {
+      display: flex;
+      flex-direction: column;
+      width: 175%;
+      margin-left: 0;
     }
     h3{
         text-align: center;
