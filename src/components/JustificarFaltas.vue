@@ -4,23 +4,24 @@
             <div class="d-flex flex-column card-body">
                 <h3 class="mb-4 d-flex justify-content-center">Justificar Falta</h3>
                 <p class="alert alert-success" :style="success">Justificativa enviada com sucesso!</p>
+                <p class="alert alert-danger" :style="danger">{{msg}}</p>
                 <div class="d-flex flex-row justify-content-between flex-wrap">
-                    <div class="d-flex flex-column align-items-center mw-100">
+                    <div class="d-flex flex-column input-Date ">
                         <label for="inicio">Data inicial: </label>
-                        <input :class="validarCampos.dataInicio" @input="limparCampo()" v-model="dataInicio" type="date" name="datainicio" id="datainicio">
+                        <input :class="validarCampos.dataInicio" @input="limparCampo()" v-model="dataInicio" type="date" name="datainicio" id="datainicio" required>
                     </div>
-                    <div class="d-flex flex-column align-items-center mw-100">
+                    <div class="d-flex flex-column input-Date">
                         <label for="fim">Data final: </label>
-                        <input :class="validarCampos.dataFim" @input="limparCampo()" v-model="dataFim" type="date" name="datafim" id="datafim">
+                        <input :class="validarCampos.dataFim" @input="limparCampo()" v-model="dataFim" type="date" name="datafim" id="datafim" required>
                     </div>
                 </div>
                 <div class="d-flex flex-column mt-2 mb-2">
                     <label for="descricao">Descrição:</label>
-                    <textarea :class="validarCampos.desc" @input="limparCampo()" v-model="desc" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <textarea :class="validarCampos.desc" @input="limparCampo()" v-model="desc" id="exampleFormControlTextarea1" rows="3" required></textarea>
                 </div>
                 <div class="d-flex flex-column mt-2 mb-2">
                     <label for="formFileMultiple" class="form-label">Anexar atestado:</label>
-                    <input :class="validarCampos.anexo" @input="pegar" type="file" id="formFileMultiple" multiple>
+                    <input :class="validarCampos.anexo" @input="pegar" type="file"  id="formFileMultiple" multiple accept="image/*, application/pdf" required>
                 </div>
                 <div class="d-flex justify-content-end mw-100 f">
                     <input type="submit" @click.prevent="validarCampo()" value="Enviar" class="btn btn-success mt-2 mb-2 mw-100">
@@ -35,8 +36,8 @@
 <script>
 import app from './firebase/index'
 import ValidarTexto from './validation/validation'
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { doc, getFirestore, collection, query,updateDoc , where, getDocs, addDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, listAll  } from "firebase/storage";
+import { doc, getFirestore, collection, query,updateDoc, increment ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Loading from './Loading.vue';
 const validação = new ValidarTexto()
@@ -44,6 +45,7 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 const auth = getAuth();
 const user = auth.currentUser;
+const listRef = ref(storage, 'anexos/');
 
     export default{
         name: "JustificarFaltas",
@@ -63,8 +65,10 @@ const user = auth.currentUser;
                 storageRef: [],
                 loading: 'display: none',
                 success: 'display: none',
+                danger: 'display: none',
                 emailUser: '',
-                atestados: []
+                atestados: [],
+                msg: ''
             }
         },
         components:{
@@ -72,41 +76,69 @@ const user = auth.currentUser;
         },
         methods: {
            async validarCampo(){
+            if(this.dataInicio > this.dataFim) {
+                this.validarCampos.dataInicio = 'form-control is-invalid'
+                this.msg = 'A data incio tem que ser anterior a data final'
+                this.danger = 'display: block'
+                setTimeout(()=>{
+                    this.danger = 'display: none'
+                },10000)
+            } // está verificando se o campo de data inicio é menor que a data final
+            if (this.dataInicio.length == 0) this.validarCampos.dataInicio = 'form-control is-invalid' // está verificando se o campo de data está preenchido
+            if (this.dataFim.length == 0) this.validarCampos.dataFim = 'form-control is-invalid' // está verificando se o campo de data está preenchido
+            if (this.desc.length == 0 && this.anexo == 0) {
+                this.validarCampos.desc = 'form-control is-invalid'
+                this.validarCampos.anexo = 'form-control is-invalid'
+                this.msg = 'Preencha pelo menos um dos campos que está vazio'
+                this.danger = 'display: block'
+                setTimeout(()=>{
+                    this.danger = 'display: none'
+                },10000)
+            }
+            if (this.dataInicio.length !=0 && this.dataFim.length != 0 && this.desc.length != 0 && this.anexo == 0 || this.desc.length == 0 && this.anexo != 0 && this.dataInicio < this.dataFim){
                 this.loading = 'display: block'
-            if (this.dataInicio.length == 0) this.validarCampos.dataInicio = 'form-control is-invalid'
-            if (this.dataFim.length == 0) this.validarCampos.dataFim = 'form-control is-invalid'
-            if (this.desc.length < 10) this.validarCampos.desc = 'form-control is-invalid'
-            if(this.anexo == 0) this.validarCampos.anexo = 'form-control is-invalid'
-            
-            if (this.dataInicio.length !=0 && this.dataFim.length != 0 && this.desc.length != 0 && this.anexo != 0){
                 this.atestados = []
+                // fazendo upload de todos arquivos anexados
                 for (let i = 0; i < this.file.length ; i++){
-                    console.log(this.file)
-                    this.atestados.push(this.storageRef[i]+'/'+this.file[i].name)
+                    this.atestados.push(`${this.storageRef}`)
                     uploadBytes(this.storageRef[i], this.file[i]).then((snapshot) => {
-                        this.success = 'display: block'
-                        setTimeout(()=>{
-                            this.success = 'display: none'
-                        },10000)
+                        //rererwr
                     });
                 }
-                console.log(this.atestados)
+                // pegando o id do usuario que está logado para adicionar a justificativa de falta que foi feita agora
                 let id;
+                let name;
+                let index = 0
                 const q = query(collection(db, "Usuarios"), where("email", "==", this.email));
                 const resultado = await getDocs(q);
                 resultado.forEach((doc) => {
                   id = doc.id
+                  name = doc.data().nome
+                  try{
+                    index = doc.data().anexos.length
+                  }
+                  catch(err)  {
+                    // console.log(err)
+                  }
+                  index +=1
+                  index = index.toString()
                   console.log(id)
                 });
                 const userRef = doc(db, "Usuarios", id);
                 await updateDoc(userRef, {
-                    anexos: {descricao: this.desc, dataInicio: this.dataInicio, dataFinal: this.dataFim, anexos: this.atestados}
+                    anexos: arrayUnion({ID: index, assunto: 'Justificativa', situacao: 'Andamento', responsavel: 'Coordenador' , nome: name,descricao: this.desc, dataInicio: this.dataInicio, dataFinal: this.dataFim, anexos: this.atestados})
                 });
-                'display: none'
-            }
-            setTimeout(()=>{
                 this.loading = 'display: none'
-            },900)
+                this.success = 'display: block'
+                this.dataInicio = ''
+                this.dataFim = ''
+                this.desc = ''
+                setTimeout(()=>{
+                    this.success = 'display: none'
+                },10000)
+
+            }
+
             
         },
         limparCampo(){
@@ -131,7 +163,12 @@ const user = auth.currentUser;
 
                 })
                 for (let i = 0; i < file.length ; i++){
-                    storageRef = ref(storage, `anexos/`);
+                    let date1 = new Date().toLocaleDateString();
+                    date1 = date1.replaceAll('/', '')
+                    let date = new Date().toLocaleTimeString();
+                    date = date.replaceAll(':', '')
+                    date += date1
+                    storageRef = ref(storage, `anexos/${date}${file[i].name}`);
                     this.storageRef.push(storageRef)
                     this.file.push(file[i])
                 }
@@ -146,7 +183,7 @@ const user = auth.currentUser;
                     const uid = user.uid;
                     this.email = email
                 } else {
-                    this.$router.push({ name: "home" })
+                    this.$router.push({ name: "login" })
                 }
                 });
         }
