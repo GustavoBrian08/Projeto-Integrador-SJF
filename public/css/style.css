@@ -12,11 +12,37 @@
 .inputWithIcon input[type=search]{
     padding-left: 38px
 }
+.dropdown strong{
+  padding-left: 55px;
+}
 
+.dropdown{
+  position: relative;
+}
+
+.dropdown img{
+  position: absolute;
+  
+}
+.dropdown div{
+  background-color: rgba(32, 32, 32, 0.76);
+  text-decoration: none;
+  padding: 0.8rem;
+  border-radius:1rem ;
+  margin-left: 10px;
+}
 .inputWithIcon{
     position: relative;
 }
-
+.tamanho{
+  padding: 1rem;
+  width: 280px;
+  height: 100vh;
+}
+.tamanho h2{
+  font-size: 40px;
+  font-family: 'Inder', sans-serif;
+}
 .inputWithIcon i{
     position: absolute;
     left: 0;
@@ -35,9 +61,20 @@
   flex-direction: row;
   width: 45%;
 }
+.voltar{
+  display: none;
+}
 
-
-
+.nav-link{
+  color: white;
+}
+.red{
+  color: red;
+}
+.red:hover,
+.red:active{
+  color: rgb(146, 11, 11);
+}
 .over {
   overflow-y: auto;
 }
@@ -47,7 +84,6 @@
   width: 100vw;
   height: 100vh;
 }
-
 .inputWithIcon input[type=text]:focus + i{
     color: dodgerblue;
 }
@@ -59,11 +95,31 @@
       margin-left: 10px;
     }
   }
-  @media screen and (max-width: 966px) {
+  @media screen and (max-width: 844px) {
     .responsive{
       width: 98%;
       margin-left: 10px;
     }
+    strong{
+      display: none;
+    }
+    .dropdown div{
+      background-color: transparent;
+      display: none;
+    }
+    hr{
+      display: none;
+    }
+    .dropdown img{
+      position: relative;
+    }
+    .tamanho{
+      width: 80px;
+    }
+    .tamanho h2{
+      font-size: 34px;
+    }
+
   }
   @media screen and (max-width: 544px) {
     .responsive{
@@ -81,6 +137,29 @@
       width: 175%;
       margin-left: 0;
     }
+    .dropdown div{
+      display: none;
+    }
+    .tamanho{
+      width: 0;
+      padding: 0;
+      display: none;
+    }
+    .tamanho h2{
+      width: 0;
+      display: none;
+    }
+    a{
+      display: none;
+    }
+    .tamanho ul{
+      width: 0;
+      display: none;
+    }
+    .dropdown img{
+      background-color: transparent;
+      display: none;
+    }
     h3{
         text-align: center;
       }
@@ -96,6 +175,13 @@
         margin-left: 0;
         
     }
+    .voltar{
+      margin-left: 1px;
+      margin-right: 1px;
+      display: flex;
+      position: absolute;
+      top: 50%;
+    }
   }
   @media screen and (max-width: 300px) {
     .responsive{
@@ -107,5 +193,25 @@
     .responsive{
       width: 100%;
     }
+    .dropdown div{
+      display: none;
+    }
+    
+    .tamanho h2{
+      width: 0;
+      display: none;
+    }
+    a{
+      display: none;
+    }
+    .tamanho ul{
+      width: 0;
+      display: none;
+    }
+    .dropdown img{
+      background-color: transparent;
+      display: none;
+    }
+    
   }
 

@@ -40,15 +40,14 @@
 <script>
 
 export default {
-    name: 'Home',
-    components: {
-        
-    }
-
+    name: 'Home'
 }
 </script>
 
 <style>
+  body{
+    background: rgb(255, 255, 255);
+  }
   .situacao {
     background-color: #A5D4FF;
     border-radius: 0 30px 30px 0;

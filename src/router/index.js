@@ -1,10 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import app from '@/components/firebase/index'
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
 
 const routes = [{
         path: '/',
         name: 'home',
-        component: HomeView
+        component: HomeView,
+        beforeEnter: (to, from, next) => {
+            onAuthStateChanged(auth, async (user) => {
+                if (user !== null) {
+                    const email = user.email;
+                    next()
+                }else{
+                    next({
+                        name: 'login'
+                    })
+                }
+            })
+        }
     },
     {
         path: '/login',
@@ -25,12 +40,37 @@ const routes = [{
         path: '/justificar',
         name: 'justificar',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/JustificarFaltasView.vue')
+            import ( /* webpackChunkName: "about" */ '../views/JustificarFaltasView.vue'),
+            beforeEnter: (to, from, next) => {
+                onAuthStateChanged(auth, async (user) => {
+                    if (user !== null) {
+                        const email = user.email;
+                        next()
+                    }else{
+                        next({
+                            name: 'login'
+                        })
+                    }
+                })
+            }
+
     }, {
         path: '/historico-de-justificativas',
         name: 'historicoDeJustificativas',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/HistoricoDeJustificatiasView.vue')
+            import ( /* webpackChunkName: "about" */ '../views/HistoricoDeJustificatiasView.vue'),
+            beforeEnter: (to, from, next) => {
+                onAuthStateChanged(auth, async (user) => {
+                    if (user !== null) {
+                        const email = user.email;
+                        next()
+                    }else{
+                        next({
+                            name: 'login'
+                        })
+                    }
+                })
+            }
     },
 ]
 
