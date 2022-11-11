@@ -46,7 +46,7 @@ export default {
 
 <style>
   body{
-    background: rgb(255, 255, 255);
+    background: rgba(255, 255, 255, 0.911);
   }
   .situacao {
     background-color: #A5D4FF;

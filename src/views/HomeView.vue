@@ -1,18 +1,20 @@
 <template>
-  <div class="login">
-    <Login />
+  <div class="home d-flex bg-white">
+    <slideBar />
+    <Home />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-
-import Login from '@/components/Login.vue';
+import slideBar from '@/components/slideBar.vue'
+import Home from '@/components/Home.vue';
 
 export default {
-  name: 'LoginView',
+  name: 'HomeView',
   components: {
-    Login
+    Home,
+    slideBar
   }
 }
 </script>
