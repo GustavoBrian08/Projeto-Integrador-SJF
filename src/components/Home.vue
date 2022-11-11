@@ -3,7 +3,7 @@
     <main class="d-flex flex-column">
       <div style="width:75vw; margin-left:25px;">
         <div class="d-flex justify-content-between mt-5" style="width: 100%;">
-            <h2>Douglas Barros (2020003minf247)</h2>
+            <h2>{{users.nome}} ({{users.matricula}})</h2>
             <button type="button" class="btn btn-primary">Editar</button>
         </div>
       </div>
@@ -15,21 +15,21 @@
         </svg>
         <table class="table table-striped table-hover">
             <tr>
-              <td><strong>Nome: </strong>Douglas Barros</td>
-              <td><strong>Situação: </strong><span class="card-body situacao">Matriculado</span></td>
+              <td><strong>Nome: </strong>{{users.nome}}</td>
+              <td><strong>Situação: </strong><span class="card-body situacao">{{users.matricula}}</span></td>
             </tr>
             <tr>
-              <td><strong>Matricula: </strong>2020003minf223</td>
-              <td><strong>Ingressou: </strong>2022/2</td>
+              <td><strong>Matricula: </strong>{{users.matricula}}</td>
+              <td><strong>Ingressou: </strong>2019/2</td>
             </tr>
             <tr>
-              <td colspan="2"><strong>Email:</strong> douglasbarros@gmail.com</td>
+              <td colspan="2"><strong>Email:</strong> {{users.email}}</td>
             </tr>
             <tr>
               <td colspan="2"><strong>Curso:</strong> 16MINF - Técnico em Informática</td>
             </tr>
             <tr>
-              <td ><strong>Período:</strong> 4</td>
+              <td ><strong>Período:</strong> {{users.turma}}</td>
             </tr>
         </table>
       </div>
@@ -38,9 +38,36 @@
 </template>
 
 <script>
-
+ import app from './firebase/index'
+import { doc, getFirestore, collection, query,updateDoc ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
+    import { getAuth, onAuthStateChanged } from "firebase/auth";
+    const db = getFirestore(app);
+    const auth = getAuth();
+    const user = auth.currentUser;
 export default {
-    name: 'Home'
+    name: 'Home',
+    data(){
+      return{
+        users:''
+      }
+    },
+      created(){
+          onAuthStateChanged(auth, async (user) => {
+              if (user !== null) {
+                  const email = user.email;
+                  const uid = user.uid;
+                  let email1 = email
+                  let id;
+                  const q = query(collection(db, "Usuarios"), where("email", "==", email1));
+                  const resultado = await getDocs(q);
+                  resultado.forEach((doc) => {
+                  id = doc.id
+                  this.users = doc.data()
+                  console.log(this.users)
+                  });
+              }
+              });
+      }
 }
 </script>
 
