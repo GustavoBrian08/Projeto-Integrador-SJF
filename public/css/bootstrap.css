@@ -3659,7 +3659,7 @@ textarea.form-control-lg {
   }
 }
 .nav-link:hover, .nav-link:focus {
-  color: var(--bs-nav-link-hover-color);
+  color: rgb(4, 240, 4);
 }
 .nav-link.disabled {
   color: var(--bs-nav-link-disabled-color);

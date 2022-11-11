@@ -1,4 +1,5 @@
 <template>
+    
     <div class="bg-white bloco p-3" >
         <div class="d-flex flex-column mb-3">
             <h3>Processos:</h3>
@@ -39,6 +40,7 @@
     const auth = getAuth();
     const user = auth.currentUser;
 import paginate from '@/components/paginate.vue'
+
     export default {
         name: 'HistoricoDeJustificativas',
         components:{
