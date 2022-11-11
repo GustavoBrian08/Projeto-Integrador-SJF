@@ -6,7 +6,7 @@
         <div class="dropdown">
             <img src="https://www.kindpng.com/picc/m/105-1055656_account-user-profile-avatar-avatar-user-profile-icon.png" alt="" width="52" height="52" class="rounded-circle me-2">
             <div class="d-flex align-items-center text-white">
-                <strong>Carlos Eduardo</strong>
+                <strong>{{users.nome}}</strong>
             </div>
         </div>
         <hr>
@@ -39,7 +39,35 @@
 </template>
 
 <script>
+ import app from './firebase/index'
+import { doc, getFirestore, collection, query,updateDoc ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
+    import { getAuth, onAuthStateChanged } from "firebase/auth";
+    const db = getFirestore(app);
+    const auth = getAuth();
+    const user = auth.currentUser;
     export default{
-        name: "slideBar"
-    }
+        name: "slideBar",
+            data(){
+            return{
+                users:''
+            }
+            },
+            created(){
+                onAuthStateChanged(auth, async (user) => {
+                    if (user !== null) {
+                        const email = user.email;
+                        const uid = user.uid;
+                        let email1 = email
+                        let id;
+                        const q = query(collection(db, "Usuarios"), where("email", "==", email1));
+                        const resultado = await getDocs(q);
+                        resultado.forEach((doc) => {
+                        id = doc.id
+                        this.users = doc.data()
+                        console.log(this.users)
+                        });
+                    }
+                    });
+            }
+        }
 </script>
