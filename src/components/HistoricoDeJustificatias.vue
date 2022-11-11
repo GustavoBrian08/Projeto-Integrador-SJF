@@ -57,15 +57,15 @@ import paginate from '@/components/paginate.vue'
         methods: {
             filtrar(event){
                 this.input = event.target.value
-                this.list = this.intems
+                this.list = this.items
             },
             situacaoFiltrar(event){
                 this.situacao = event.target.value
-                this.list = this.intems
+                this.list = this.items
             }
             
         },computed: {
-            intems() {
+            items() {
                 let valores = []
                 valores = this.list1.filter((item) =>{
                     return (
@@ -100,8 +100,6 @@ import paginate from '@/components/paginate.vue'
                     this.list = doc.data().anexos
                     this.list1 = doc.data().anexos
                     });
-                } else {
-                    this.$router.push({ name: "login" })
                 }
                 });
         }

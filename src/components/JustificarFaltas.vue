@@ -182,8 +182,6 @@ const listRef = ref(storage, 'anexos/');
                     const email = user.email;
                     const uid = user.uid;
                     this.email = email
-                } else {
-                    this.$router.push({ name: "login" })
                 }
                 });
         }
