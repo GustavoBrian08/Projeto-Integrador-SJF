@@ -1,18 +1,18 @@
 <template>
-<div class="home d-flex">
-    <slideBar />
-    <Home />
-</div>
+  <div class="login">
+    <Login />
+  </div>
 </template>
 
 <script>
-import slideBar from '@/components/slideBar.vue'
-import Home from '@/components/Home.vue';
+// @ is an alias to /src
+
+import Login from '@/components/Login.vue';
+
 export default {
-    name: 'HomeView',
-    components: {
-        Home,
-        slideBar
-    }
+  name: 'LoginView',
+  components: {
+    Login
+  }
 }
 </script>
