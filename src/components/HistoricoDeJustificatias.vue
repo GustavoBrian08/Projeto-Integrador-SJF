@@ -34,7 +34,7 @@
 
 <script>
  import app from './firebase/index'
-    import { doc, getFirestore, collection, query,updateDoc ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
+    import { doc, getFirestore, collection,collectionGroup, query,updateDoc, onSnapshot ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
     import { getAuth, onAuthStateChanged } from "firebase/auth";
     const db = getFirestore(app);
     const auth = getAuth();
@@ -51,7 +51,7 @@ import paginate from '@/components/paginate.vue'
                 list:[],
                 input: '',
                 list1:[],
-                situacao: 'Selecione uma situação'
+                situacao: 'Selecione uma situação',
             }
         },
         methods: {
@@ -70,7 +70,7 @@ import paginate from '@/components/paginate.vue'
                 valores = this.list1.filter((item) =>{
                     return (
                         item.responsavel.toLowerCase().indexOf(this.input.toLowerCase()) > - 1 || 
-                        item.ID.toLowerCase().indexOf(this.input.toLowerCase()) > - 1 ||
+                        item.id.toLowerCase().indexOf(this.input.toLowerCase()) > - 1 ||
                         item.dataInicio.toLowerCase().indexOf(this.input.toLowerCase()) > - 1
                     )
                 })
@@ -87,22 +87,24 @@ import paginate from '@/components/paginate.vue'
             }
         },
         created(){
-            onAuthStateChanged(auth, async (user) => {
-                if (user !== null) {
-                    const email = user.email;
-                    const uid = user.uid;
-                    let email1 = email
-                    let id;
-                    const q = query(collection(db, "Usuarios"), where("email", "==", email1));
-                    const resultado = await getDocs(q);
-                    resultado.forEach((doc) => {
-                    id = doc.id
-                    this.list = doc.data().anexos
-                    this.list1 = doc.data().anexos
-                    });
-                }
+          onAuthStateChanged(auth, async (user) => {
+              if (user !== null) {
+                const querySnapshot = await getDocs(collectionGroup(db, "Justificativas"));
+                const q = collectionGroup(db, "Justificativas")
+                const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const justificativas = [];
+                querySnapshot.forEach((doc) => {
+                    justificativas.push({id: doc.id, assunto: doc.data().assunto, dataInicio: doc.data().dataInicio, situacao: doc.data().situacao, responsavel: doc.data().responsavel});
                 });
-        }
+                console.log(justificativas)
+                this.list = justificativas
+                this.list1 = justificativas
+                });
+        
+ 
+              }
+              });
+      }
     }
 </script>
 

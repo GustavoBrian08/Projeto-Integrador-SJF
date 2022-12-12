@@ -30,13 +30,6 @@
               Porfavor insira um email válido.
             </div>
           </div>
-          <div>
-            <label for="turma">Turma:</label>
-            <input :class="validarCampos.turma" @input="tamanhoTurma()" v-model="usuario.turma" type="text" required>
-            <div class="invalid-feedback">
-              A turma deve ser maior que 3 caracteres.
-            </div>
-          </div>
           <label for="senha">Senha:</label>
           <InputSenha v-model="senha" @input="tamanhoSenha()" :verificar="validarCampos.senha" :name="name" required />
           <label for="confirmarSenha" >Confirmar senha:</label>
@@ -59,7 +52,7 @@
 <script>
   import app from './firebase/index'
   import ValidarTexto from './validation/validation'
-  import { getFirestore, collection, query, where, getDocs, addDoc } from "firebase/firestore";
+  import { getFirestore, doc, setDoc, collection, query, where, getDocs, addDoc } from "firebase/firestore";
   import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
   import InputSenha from './Form/InputSenha.vue';
   import Loading from './Loading.vue'
@@ -76,7 +69,6 @@
               tamanho: 'form-control mt-2',
               nome: 'form-control mt-2',
               email: 'form-control mt-2',
-              turma: 'form-control mt-2',
               senha: 'form-control',
               confirmaSenha: 'form-control'
             },
@@ -84,8 +76,7 @@
               matricula: '',
               nome: '',
               email: '',
-              turma: '',
-              anexos: '',
+              turma: ''
             },
             senha: '',
             confirmarSenha: '',
@@ -119,12 +110,6 @@
               this.validarCampos.email = 'form-control mt-2 is-invalid'
             } 
           },
-          tamanhoTurma(){
-            
-            let resultado = validação.validarTamanho(this.usuario.turma,this.validarCampos.turma, 'nome') // verifica o tamanho do campo matricula
-            this.validarCampos.turma = resultado
-
-          },
           tamanhoSenha(){
             let resultado = validação.validarTamanho(this.senha,this.validarCampos.senha, 'senha') // verifica o tamanho do campo matricula
             this.validarCampos.senha = resultado
@@ -143,8 +128,8 @@
 
             this.loading = 'display: block'
             this.erros = []
-            if (this.usuario.matricula == '' || this.usuario.nome == '' || this.usuario.email == '' || !this.usuario.email.includes('@') || this.usuario.turma == '' || this.senha == '' || this.confirmarSenha == '') this.erros.push('campos vazios')
-            if (this.usuario.matricula.length < 13 ||this.usuario.nome.length < 3 || this.usuario.turma.length < 3 || this.senha.length < 8) this.erros.push('pouco caracteres')
+            if (this.usuario.matricula == '' || this.usuario.nome == '' || this.usuario.email == '' || !this.usuario.email.includes('@') ||  this.senha == '' || this.confirmarSenha == '') this.erros.push('campos vazios')
+            if (this.usuario.matricula.length < 13 ||this.usuario.nome.length < 3 || this.senha.length < 8) this.erros.push('pouco caracteres')
             if (this.senha != this.confirmarSenha) {
               this.erros.push('senha diferentes')
               this.senha = ''
@@ -165,7 +150,6 @@
               this.tamanhoMatricula()
               this.tamanhoNome()
               this.validarEmail()
-              this.tamanhoTurma()
               this.tamanhoSenha()
               this.senhas()
             }else if(email == true){
@@ -179,7 +163,6 @@
                   matricula: '',
                   nome: '',
                   email: '',
-                  turma: '',
                 }
                 this.senha = ''
                 this.confirmarSenha = ''
@@ -187,18 +170,24 @@
               tamanho: 'form-control mt-2',
               nome: 'form-control mt-2',
               email: 'form-control mt-2',
-              turma: 'form-control mt-2',
               senha: 'form-control',
               confirmaSenha: 'form-control'
             }
             }else{
+              console.log('entrei')
               this.loading = 'display: block'
               try {
-                const docRef = await addDoc(collection(db, "Usuarios"), this.usuario);
+                
 
                 createUserWithEmailAndPassword(auth, this.usuario.email, this.senha)
-                .then((userCredential) => {
+                .then(async (userCredential) => {
                   const user = userCredential.user;
+                  console.log(user.uid)
+                  const docRef = await setDoc(doc(db, "Usuarios", user.uid), this.usuario);
+                  // deslogar o usuario
+                  console.log(docRef)
+                  //await setDoc(doc(db, "Usuarios", user.uid), this.usuario);
+
                 })
                 .catch((error) => {
                   const errorCode = error.code;

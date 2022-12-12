@@ -12,22 +12,22 @@
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="/" class="nav-link" aria-current="page">
+            <router-link to="/" class="nav-link">
             <iconify-icon icon="line-md:home-md"></iconify-icon><strong> Inicio</strong> 
-            </a>
+            </router-link>
         </li>
         <li>
-            <a href="justificar" class="nav-link">
+            <router-link to="/justificar" class="nav-link">
                 <iconify-icon icon="line-md:clipboard-list"></iconify-icon><strong> Justificar falta</strong> 
-            </a>
+            </router-link>
         </li>
         <li>
-            <a href="historico-de-justificativas" class="nav-link">
+            <router-link to="/historico-de-justificativas" class="nav-link">
             <iconify-icon icon="line-md:text-box-to-text-box-multiple-transition"></iconify-icon><strong> Historico Justificativas</strong>  
-            </a>
+        </router-link>
         </li>
         <li>
-            <a href="#" class="nav-link red">
+            <a href="/login" @click="deslogar()" class="nav-link red">
                 <iconify-icon icon="line-md:arrow-left-circle"></iconify-icon><strong> Sair</strong>
             </a>
         </li>
@@ -40,8 +40,8 @@
 
 <script>
  import app from './firebase/index'
-import { doc, getFirestore, collection, query,updateDoc ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
-    import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+    import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
     const db = getFirestore(app);
     const auth = getAuth();
     const user = auth.currentUser;
@@ -52,20 +52,21 @@ import { doc, getFirestore, collection, query,updateDoc ,arrayUnion, where, getD
                 users:''
             }
             },
+            methods:{
+                deslogar(){
+                    signOut(auth).then(() => {
+                    }).catch((error) => {
+                    // An error happened.
+                    });
+                }
+            },
             created(){
                 onAuthStateChanged(auth, async (user) => {
                     if (user !== null) {
                         const email = user.email;
-                        const uid = user.uid;
-                        let email1 = email
-                        let id;
-                        const q = query(collection(db, "Usuarios"), where("email", "==", email1));
-                        const resultado = await getDocs(q);
-                        resultado.forEach((doc) => {
-                        id = doc.id
-                        this.users = doc.data()
-                        console.log(this.users)
-                        });
+                        const usuario = onSnapshot(doc(db, "Usuarios", user.uid), (doc) => {
+                            this.users = doc.data()
+                        }); 
                     }
                     });
             }

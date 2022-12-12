@@ -14,7 +14,8 @@
           <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
         </svg>
         <table class="table table-striped table-hover">
-            <tr>
+          <tbody class="table-group-divider">
+            <tr>  
               <td><strong>Nome: </strong>{{users.nome}}</td>
               <td><strong>Situação: </strong><span class="card-body situacao">{{users.matricula}}</span></td>
             </tr>
@@ -31,6 +32,7 @@
             <tr>
               <td ><strong>Período:</strong> {{users.turma}}</td>
             </tr>
+          </tbody>
         </table>
       </div>
    </main>
@@ -39,7 +41,7 @@
 
 <script>
  import app from './firebase/index'
-import { doc, getFirestore, collection, query,updateDoc ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
+import { doc, getFirestore, onSnapshot  } from "firebase/firestore";
     import { getAuth, onAuthStateChanged } from "firebase/auth";
     const db = getFirestore(app);
     const auth = getAuth();
@@ -55,28 +57,19 @@ export default {
           onAuthStateChanged(auth, async (user) => {
               if (user !== null) {
                   const email = user.email;
-                  const uid = user.uid;
-                  let email1 = email
-                  let id;
-                  const q = query(collection(db, "Usuarios"), where("email", "==", email1));
-                  const resultado = await getDocs(q);
-                  resultado.forEach((doc) => {
-                  id = doc.id
-                  this.users = doc.data()
-                  console.log(this.users)
+                  const usuario = onSnapshot(doc(db, "Usuarios", user.uid), (doc) => {
+                      this.users = doc.data()
                   });
+ 
               }
               });
       }
 }
 </script>
 
-<style>
-  body{
-    background: rgba(255, 255, 255, 0.911);
-  }
+<style scoped>
   .situacao {
-    background-color: #A5D4FF;
+    background: rgba(180, 219, 255, 0.925) !important;
     border-radius: 0 30px 30px 0;
     padding: 8px;
     border: 1px solid black;

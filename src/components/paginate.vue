@@ -9,13 +9,13 @@
                         </thead>
                         <tbody class="table-group-divider">
                             <tr v-for="l in list" :key="l">
-                            <th scope="row" v-if="l.ID >= idI && l.ID <= idF"><i class="bi bi-search" aria-hidden="true"></i></th>
-                            <td v-if="l.ID >= idI && l.ID <= idF">{{l.ID}}</td>
-                            <td v-if="l.ID >= idI && l.ID <= idF">{{l.assunto}}</td>
-                            <td v-if="l.ID >= idI && l.ID <= idF">{{l.nome}}</td>
-                            <td v-if="l.ID >= idI && l.ID <= idF">{{l.dataInicio}}</td>
-                            <td v-if="l.ID >= idI && l.ID <= idF">{{l.situacao}}</td>
-                            <td v-if="l.ID >= idI && l.ID <= idF">{{l.responsavel}}</td>
+                            <th scope="row"><i class="bi bi-search" aria-hidden="true"></i></th>
+                            <td>{{l.id}}</td>
+                            <td>{{l.assunto}}</td>
+                            <td>{{user.nome}}</td>
+                            <td>{{l.dataInicio}}</td>
+                            <td>{{l.situacao}}</td>
+                            <td>{{l.responsavel}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -42,7 +42,7 @@
 
 <script>
     import app from './firebase/index'
-    import { doc, getFirestore, collection, query,updateDoc ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
+    import { doc, getFirestore, onSnapshot, collection, query,updateDoc ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
     import { getAuth, onAuthStateChanged } from "firebase/auth";
     const db = getFirestore(app);
     const auth = getAuth();
@@ -62,6 +62,7 @@
                 idF: exibirTotalPage,
                 porPagina: '',
                 disable: false,
+                user: ''
             }
         },
         methods:{
@@ -87,6 +88,10 @@
 
         },
         created(){
+            const usuario = onSnapshot(doc(db, "Usuarios", user.uid), (doc) => {
+                this.user = doc.data()
+                      
+            });
             setTimeout(()=>{
                 let totalPage = this.list.length
                 this.porPagina = Math.ceil(totalPage / exibirTotalPage)

@@ -13,7 +13,7 @@
             </div>
             <input class="form-check-input" type="checkbox"> Lembrar a senha?
             <div>
-                <a class="link-dark" href="#">Esqueceu a senha?</a>
+                <router-link to="#" class="link-dark">Esqueceu a senha?</router-link>
             </div>
             <div><Submit /></div>
         </form>

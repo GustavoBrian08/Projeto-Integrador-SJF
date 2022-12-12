@@ -24,7 +24,7 @@
                     <input :class="validarCampos.anexo" @input="pegar" type="file"  id="formFileMultiple" multiple accept="image/*, application/pdf" required>
                 </div>
                 <div class="d-flex justify-content-end mw-100 f">
-                    <input type="submit" @click.prevent="validarCampo()" value="Enviar" class="btn btn-success mt-2 mb-2 mw-100">
+                    <input type="submit" @click.prevent="enviarFormulario()" value="Enviar" class="btn btn-success mt-2 mb-2 mw-100">
                 </div>
             </div>
         </div>
@@ -47,6 +47,7 @@ const auth = getAuth();
 const user = auth.currentUser;
 const listRef = ref(storage, 'anexos/');
 
+
     export default{
         name: "JustificarFaltas",
         data(){
@@ -68,14 +69,15 @@ const listRef = ref(storage, 'anexos/');
                 danger: 'display: none',
                 emailUser: '',
                 atestados: [],
-                msg: ''
+                msg: '',
+                id: ''
             }
         },
         components:{
           Loading
         },
         methods: {
-           async validarCampo(){
+           async enviarFormulario(){
             if(this.dataInicio > this.dataFim) {
                 this.validarCampos.dataInicio = 'form-control is-invalid'
                 this.msg = 'A data incio tem que ser anterior a data final'
@@ -106,28 +108,8 @@ const listRef = ref(storage, 'anexos/');
                     });
                 }
                 // pegando o id do usuario que está logado para adicionar a justificativa de falta que foi feita agora
-                let id;
-                let name;
-                let index = 0
-                const q = query(collection(db, "Usuarios"), where("email", "==", this.email));
-                const resultado = await getDocs(q);
-                resultado.forEach((doc) => {
-                  id = doc.id
-                  name = doc.data().nome
-                  try{
-                    index = doc.data().anexos.length
-                  }
-                  catch(err)  {
-                    // console.log(err)
-                  }
-                  index +=1
-                  index = index.toString()
-                  console.log(id)
-                });
-                const userRef = doc(db, "Usuarios", id);
-                await updateDoc(userRef, {
-                    anexos: arrayUnion({ID: index, assunto: 'Justificativa', situacao: 'Andamento', responsavel: 'Coordenador' , nome: name,descricao: this.desc, dataInicio: this.dataInicio, dataFinal: this.dataFim, anexos: this.atestados})
-                });
+                const userRef = doc(db, "Usuarios", this.id);
+                const docRef = await addDoc(collection(userRef, "Justificativas"), {assunto: 'Justificativa', situacao: 'Andamento', responsavel: 'Coordenador',descricao: this.desc,dataInicio: this.dataInicio, dataFinal: this.dataFim,anexos: this.atestados});
                 this.loading = 'display: none'
                 this.success = 'display: block'
                 this.dataInicio = ''
@@ -180,8 +162,8 @@ const listRef = ref(storage, 'anexos/');
             onAuthStateChanged(auth, (user) => {
                 if (user !== null) {
                     const email = user.email;
-                    const uid = user.uid;
                     this.email = email
+                    this.id = user.uid
                 }
                 });
         }
