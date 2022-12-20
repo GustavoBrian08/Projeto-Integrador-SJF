@@ -1,6 +1,6 @@
 <template>
     
-    <div class="bg-white bloco p-3" >
+    <div class="over bg-white bloco p-3" >
         <div class="d-flex flex-column mb-3">
             <h3>Processos:</h3>
             <div class="mb-4">
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <hr>
-                <div class="mt-4">
+                <div class="overflow-auto mt-4">
                     <paginate :list="list" />
                 </div>
             </div>
@@ -89,14 +89,20 @@ import paginate from '@/components/paginate.vue'
         created(){
           onAuthStateChanged(auth, async (user) => {
               if (user !== null) {
-                const querySnapshot = await getDocs(collectionGroup(db, "Justificativas"));
-                const q = collectionGroup(db, "Justificativas")
-                const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const q = await collection(doc(db,'Usuarios',user.uid),"Justificativas");
+                onSnapshot(q, (querySnapshot) => {
                 const justificativas = [];
                 querySnapshot.forEach((doc) => {
-                    justificativas.push({id: doc.id, assunto: doc.data().assunto, dataInicio: doc.data().dataInicio, situacao: doc.data().situacao, responsavel: doc.data().responsavel});
+                    let situacao
+                    if(doc.data().situacao == 1) {
+                        situacao = 'Andamento'
+                    }else if(doc.data().situacao == 2){
+                        situacao = 'Concluído'
+                    }else if(doc.data().situacao == 3){
+                        situacao = 'Arquivado'
+                    }
+                    justificativas.push({id: doc.id, assunto: doc.data().assunto, dataInicio: doc.data().dataInicio, situacao: situacao, responsavel: doc.data().responsavel});
                 });
-                console.log(justificativas)
                 this.list = justificativas
                 this.list1 = justificativas
                 });

@@ -109,7 +109,7 @@ const listRef = ref(storage, 'anexos/');
                 }
                 // pegando o id do usuario que está logado para adicionar a justificativa de falta que foi feita agora
                 const userRef = doc(db, "Usuarios", this.id);
-                const docRef = await addDoc(collection(userRef, "Justificativas"), {assunto: 'Justificativa', situacao: 'Andamento', responsavel: 'Coordenador',descricao: this.desc,dataInicio: this.dataInicio, dataFinal: this.dataFim,anexos: this.atestados});
+                const docRef = await addDoc(collection(userRef, "Justificativas"), {assunto: 'Justificativa', situacao: 1, responsavel: 'Coordenador',descricao: this.desc,dataInicio: this.dataInicio, dataFinal: this.dataFim,anexos: this.atestados});
                 this.loading = 'display: none'
                 this.success = 'display: block'
                 this.dataInicio = ''

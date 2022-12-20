@@ -8,6 +8,9 @@
     margin-left: 10px;
     margin-top: 24px;
 }
+.visivel{
+  display: block;
+}
 
 .inputWithIcon input[type=search]{
     padding-left: 38px
@@ -76,7 +79,7 @@
   color: rgb(146, 11, 11);
 }
 .over {
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .bloco {
@@ -117,16 +120,25 @@
       width: 80px;
     }
     .tamanho h2{
-      font-size: 34px;
+      font-size: 25px;
+    }
+    .nav{
+      --bs-nav-link-padding-x: 0.6rem !important;
     }
 
   }
-  @media screen and (max-width: 544px) {
+  @media screen and (max-width: 550px) {
     .responsive{
         display: flex;
         flex-direction: column;
         width: 100%;
         margin-left: 0;
+    }
+    .visivel{
+      display: none;
+    }
+    .over{
+      overflow: auto;
     }
     .form-select-L{
       width: 400%;
@@ -136,29 +148,6 @@
       flex-direction: column;
       width: 175%;
       margin-left: 0;
-    }
-    .dropdown div{
-      display: none;
-    }
-    .tamanho{
-      width: 0;
-      padding: 0;
-      display: none;
-    }
-    .tamanho h2{
-      width: 0;
-      display: none;
-    }
-    a{
-      display: none;
-    }
-    .tamanho ul{
-      width: 0;
-      display: none;
-    }
-    .dropdown img{
-      background-color: transparent;
-      display: none;
     }
     h3{
         text-align: center;
@@ -175,42 +164,30 @@
         margin-left: 0;
         
     }
-    .voltar{
-      margin-left: 1px;
-      margin-right: 1px;
-      display: flex;
-      position: absolute;
-      top: 50%;
-    }
   }
   @media screen and (max-width: 300px) {
-    .responsive{
-      width: 100%;
-    }
-    h3{
-      text-align: center;
-    }
-    .responsive{
-      width: 100%;
-    }
-    .dropdown div{
-      display: none;
+    .d-flex{
+      width: auto !important;
     }
     
-    .tamanho h2{
-      width: 0;
-      display: none;
+    
+  }
+  @media screen and (max-width: 281px) {
+    .d-flex{
+      width: auto !important;
+      
     }
-    a{
-      display: none;
+    .form-control-L{
+      width: 120px;
     }
-    .tamanho ul{
-      width: 0;
-      display: none;
+    .form-select-L{
+      width: 120px;
     }
-    .dropdown img{
-      background-color: transparent;
-      display: none;
+    .tamanho{
+      padding: 5px;
+    }
+    .nav{
+      --bs-nav-link-padding-x: 1rem !important;
     }
     
   }

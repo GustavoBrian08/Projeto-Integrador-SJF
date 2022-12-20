@@ -1,13 +1,13 @@
 <template>
-    <div class="over" style="background-color: #fff;">
+    <div class="overflow-auto" style="background-color: #fff;">
         <div class="table-L" >
-            <table class="table table-striped table-bordered table-hover">
+            <table class="table overflow-auto table-striped table-bordered table-hover">
                         <thead>
                             <tr >
                             <th scope="col" v-for="h in headrs" :key="h">{{h}}</th>
                             </tr>
                         </thead>
-                        <tbody class="table-group-divider">
+                        <tbody class="overflow-auto table-group-divider">
                             <tr v-for="l in list" :key="l">
                             <th scope="row"><i class="bi bi-search" aria-hidden="true"></i></th>
                             <td>{{l.id}}</td>
@@ -20,23 +20,6 @@
                         </tbody>
                     </table>
                 </div>
-        <div class="d-flex justify-content-center mt-4">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                    <a class="page-link" href="" @click.prevent="updatedPrev()" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                    </li>
-                    <li class="page-item" v-for="i in porPagina" :key="i" @click.prevent="goTo(i)"><a class="page-link" href="">{{i}}</a></li>
-                    <li class="page-item">
-                    <a class="page-link" href="" @click.prevent="updatedLast()" aria-label="Next">
-                        <span aria-hidden="true" >&raquo;</span>
-                    </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
     </div>
 </template>
 
@@ -89,8 +72,7 @@
         },
         created(){
             const usuario = onSnapshot(doc(db, "Usuarios", user.uid), (doc) => {
-                this.user = doc.data()
-                      
+                this.user = doc.data()  
             });
             setTimeout(()=>{
                 let totalPage = this.list.length
@@ -105,4 +87,9 @@
  body{
     background: #ffff;
  }
+ @media (max-height: 625px) {
+      .over{
+        overflow: auto;
+      }
+    }
 </style>

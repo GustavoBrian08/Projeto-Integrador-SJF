@@ -3,9 +3,10 @@
         <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
             <h2 >SJF</h2>
         </a>
-        <div class="dropdown">
+        <div class="dropdown" >
             <img src="https://www.kindpng.com/picc/m/105-1055656_account-user-profile-avatar-avatar-user-profile-icon.png" alt="" width="52" height="52" class="rounded-circle me-2">
-            <div class="d-flex align-items-center text-white">
+            <div class="d-flex align-items-center text-white" style="height: 48px;">
+                <img class="visivel" v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px; margin-left: 86px;">
                 <strong>{{users.nome}}</strong>
             </div>
         </div>
@@ -33,14 +34,11 @@
         </li>
         </ul>
     </div>
-    <div class="voltar">
-        <iconify-icon class="voltar" icon="line-md:arrow-left-circle"></iconify-icon>
-    </div>
 </template>
 
 <script>
- import app from './firebase/index'
-import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+    import app from './firebase/index'
+    import { doc, getFirestore, onSnapshot } from "firebase/firestore";
     import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
     const db = getFirestore(app);
     const auth = getAuth();
@@ -58,6 +56,10 @@ import { doc, getFirestore, onSnapshot } from "firebase/firestore";
                     }).catch((error) => {
                     // An error happened.
                     });
+                },
+                capitalizeFirst(str) {
+                    var subst = str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+                    return subst;
                 }
             },
             created(){
@@ -66,6 +68,7 @@ import { doc, getFirestore, onSnapshot } from "firebase/firestore";
                         const email = user.email;
                         const usuario = onSnapshot(doc(db, "Usuarios", user.uid), (doc) => {
                             this.users = doc.data()
+                            this.users = {nome: this.capitalizeFirst(this.users.nome), matricula: this.users.matricula, email: this.users.email, turma: this.capitalizeFirst(this.users.turma)}
                         }); 
                     }
                     });
