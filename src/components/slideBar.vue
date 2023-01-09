@@ -14,25 +14,28 @@
         <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
             <router-link to="/" class="nav-link">
-            <iconify-icon icon="line-md:home-md"></iconify-icon><strong> Inicio</strong> 
+            <iconify-icon icon="line-md:home-md"></iconify-icon><strong>   Inicio</strong> 
             </router-link>
         </li>
         <li>
             <router-link to="/justificar" class="nav-link">
-                <iconify-icon icon="line-md:clipboard-list"></iconify-icon><strong> Justificar falta</strong> 
+                <iconify-icon icon="line-md:clipboard-list"></iconify-icon><strong>   Justificar falta</strong> 
             </router-link>
         </li>
         <li>
             <router-link to="/historico-de-justificativas" class="nav-link">
-            <iconify-icon icon="line-md:text-box-to-text-box-multiple-transition"></iconify-icon><strong> Historico Justificativas</strong>  
+            <iconify-icon icon="line-md:text-box-to-text-box-multiple-transition"></iconify-icon><strong>   Historico Justificativas</strong>  
         </router-link>
         </li>
         <li>
             <a href="/login" @click="deslogar()" class="nav-link red">
-                <iconify-icon icon="line-md:arrow-left-circle"></iconify-icon><strong> Sair</strong>
+                <iconify-icon icon="line-md:arrow-left-circle"></iconify-icon><strong>   Sair</strong>
             </a>
         </li>
         </ul>
+        <div @click="ativarMenu()" class="mostrar-menu text-bg-secondary">
+            <iconify-icon icon="ic:outline-arrow-forward-ios"></iconify-icon>
+        </div>
     </div>
 </template>
 
@@ -60,6 +63,15 @@
                 capitalizeFirst(str) {
                     var subst = str.toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
                     return subst;
+                },
+                ativarMenu(){
+                    const menu = document.querySelector('div.mostrar-menu').classList
+                    const menuGeral = document.querySelector('div.tamanho').classList
+                    if (menuGeral.value.includes('ativado')){
+                        menuGeral.remove('ativado')
+                    }else{
+                        menuGeral.add('ativado')
+                    }
                 }
             },
             created(){

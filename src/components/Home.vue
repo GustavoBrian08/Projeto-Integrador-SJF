@@ -17,7 +17,7 @@
           <tbody class="table-group-divider">
             <tr>  
               <td><strong>Nome: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"> <span v-else >{{users.nome}}</span></td>
-              <td><strong>Situação: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><span v-else class="card-body situacao">{{users.matricula}}</span></td>
+              <td><strong>Situação: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><span v-else class="card-body situacao">Matriculado</span></td>
             </tr>
             <tr>
               <td><strong>Matricula: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;">

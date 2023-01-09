@@ -42,10 +42,31 @@
   width: 280px;
   height: 100vh;
 }
+.tamanho a{
+  display: block;
+  /* width: 100%; */
+}
 .tamanho h2{
   font-size: 40px;
   font-family: 'Inder', sans-serif;
 }
+
+.mostrar-menu {
+  display: none;
+  position: absolute;
+  z-index: 15;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 0 3px 6px;
+  top: 50%;
+  left: -10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.mostrar-menu iconify-icon {
+  font-size: 30px !important;
+}
+
 .inputWithIcon i{
     position: absolute;
     left: 0;
@@ -115,12 +136,19 @@
     }
     .dropdown img{
       position: relative;
+      margin-left: 5px;
     }
     .tamanho{
       width: 80px;
+      padding: 0.5rem;
     }
     .tamanho h2{
-      font-size: 25px;
+      font-size: 35px;
+      margin-left: 2px;
+    }
+    iconify-icon {
+      font-size: 35px !important;
+      margin-left: 0 !important;
     }
     .nav{
       --bs-nav-link-padding-x: 0.6rem !important;
@@ -134,6 +162,7 @@
         width: 100%;
         margin-left: 0;
     }
+    
     .visivel{
       display: none;
     }
@@ -165,17 +194,125 @@
         
     }
   }
+  @media screen and (max-width: 420px) {
+    body{
+      overflow: hidden;
+    }
+    .container{
+      overflow-x: auto;
+    }
+    .mostrar-menu {
+      display: flex;
+    }
+    .tamanho{
+      width: 2%;
+      margin-right: 15px;
+    }
+    .tamanho h2{
+      display: none;
+    }
+    .dropdown img {
+      display: none;
+    }
+    .nav-pills {
+      display: none;
+    }
+    textarea.form-control {
+      width: 100%;
+    }
+    .ativado{
+      width: 100% !important;
+    }
+    .ativado a{
+      display: flex;
+      width: 100%;
+      align-items: center;
+    }
+    .ativado .dropdown img {
+      display: flex;
+      position: absolute;
+    }
+    .ativado .dropdown div{
+      background-color: rgba(32, 32, 32, 0.76);
+      text-decoration: none;
+      padding: 0.8rem;
+      border-radius:1rem ;
+      margin-left: 10px;
+    }
+    .ativado h2 {
+      display: block;
+    }
+    .ativado iconify-icon {
+      margin-right: 5px !important;
+    }
+    .ativado strong{
+      display: block;
+    }
+    
+    .ativado .nav-pills {
+      display: flex;
+      padding: 5px;
+      margin: 10px;
+    }
+  }
   @media screen and (max-width: 300px) {
     .d-flex{
       width: auto !important;
     }
+    .tamanho{
+      width: 2% !important;
+      margin-right: 0;
+    }
+    textarea.form-control {
+      width: 110%;
+    }
+    .ativado{
+      width: 100% !important;
+      
+    }
+    .ativado a{
+      display: flex;
+      width: 100%;
+      align-items: center;
+    }
+    .ativado .dropdown img {
+      display: flex;
+      position: absolute;
+    }
+    .ativado .dropdown div{
+      background-color: rgba(32, 32, 32, 0.76);
+      text-decoration: none;
+      padding: 0.8rem;
+      border-radius:1rem ;
+      margin-left: 10px;
+    }
+    .ativado h2 {
+      display: block;
+    }
+    .ativado iconify-icon {
+      margin-right: 5px !important;
+    }
+    .ativado strong{
+      display: block;
+    }
     
+    .ativado .nav-pills {
+      display: flex;
+      padding: 5px;
+      margin: 10px;
+    }
     
   }
   @media screen and (max-width: 281px) {
     .d-flex{
       width: auto !important;
-      
+    }
+    .tamanho{
+      width: 2% !important;
+      margin-right: 0;
+    }
+    .card{
+      padding: 2rem !important;
     }
     .form-control-L{
       width: 120px;
@@ -183,12 +320,48 @@
     .form-select-L{
       width: 120px;
     }
+    textarea.form-control {
+      width: 110%;
+    }
     .tamanho{
       padding: 5px;
     }
     .nav{
       --bs-nav-link-padding-x: 1rem !important;
     }
+    .ativado{
+      width: 100% !important;
+    }
+    .ativado a{
+      display: flex;
+      width: 100%;
+      align-items: center;
+    }
+    .ativado .dropdown img {
+      display: flex;
+      position: absolute;
+    }
+    .ativado .dropdown div{
+      background-color: rgba(32, 32, 32, 0.76);
+      text-decoration: none;
+      padding: 0.8rem;
+      border-radius:1rem ;
+      margin-left: 10px;
+    }
+    .ativado h2 {
+      display: block;
+    }
+    .ativado iconify-icon {
+      margin-right: 5px !important;
+    }
+    .ativado strong{
+      display: block;
+    }
     
+    .ativado .nav-pills {
+      display: flex;
+      padding: 5px;
+      margin: 10px;
+    }
   }
 
