@@ -363,5 +363,13 @@
       padding: 5px;
       margin: 10px;
     }
+    .card-body{
+      padding: 0 !important;
+    }
   }
 
+  @media (max-height: 680px) {
+    .tela-600{
+      max-height: 320px; min-height: 300px; overflow-y: auto;
+    }
+  }

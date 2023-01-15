@@ -3,7 +3,7 @@
         <h4><span class="fas fa-lock float"></span> Login:</h4>
         <hr>
         <div>
-            <p class="alert alert-danger" :style="on">Matrícula e/ou Senha incorretos</p>
+            <p class="alert alert-danger" :style="on">{{ msg }}</p>
         </div>
         <form action="" @submit.prevent="fazerLogin()" >
             <div>
@@ -42,13 +42,15 @@
                 senhaUsuario: '',
                 matriculaUsuario: '',
                 classe:'form-control',
-                on:'display: none'
+                on:'display: none',
+                msg:''
             }
         },
         methods: {
             async fazerLogin(){
                 this.emitter.emit('my-event', {'loading': 'display: block'})
                 let email;
+                let isValidado
                 const q = query(collection(db, "Usuarios"), where("matricula", "==", this.matriculaUsuario));
                 const resultado = await getDocs(q);
                 
@@ -56,26 +58,37 @@
                     const matricula = doc.data().matricula
                     if (matricula == this.matriculaUsuario) {
                         email = doc.data().email
+                        isValidado = doc.data().isValidado
                     }
                 });
-                await signInWithEmailAndPassword(auth, email, this.senhaUsuario)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    console.log(user)
-                    this.$router.push({ name: "justificar" })
-                    this.emitter.emit('my-event', {'loading': 'display: none'})
-                })
-                .catch((error) => {
-                    this.classe = 'form-control is-invalid'
+                if (!isValidado) {
+                    this.matriculaUsuario = ''
+                    this.senhaUsuario = ''
+                    this.msg = 'Seu cadastro ainda não foi validado pelo coordenador'
                     this.on = 'display: block'
                     this.emitter.emit('my-event', {'loading': 'display: none'})
                     setTimeout(()=>{
                         this.classe = 'form-control'
                         this.on = 'display: none'
                     },10000)
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                });
+                }else{
+                    await signInWithEmailAndPassword(auth, email, this.senhaUsuario)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        this.$router.push({ name: "home" })
+                        this.emitter.emit('my-event', {'loading': 'display: none'})
+                    })
+                    .catch((error) => {
+                        this.msg = "Matrícula e/ou Senha incorretos"
+                        this.classe = 'form-control is-invalid'
+                        this.on = 'display: block'
+                        this.emitter.emit('my-event', {'loading': 'display: none'})
+                        setTimeout(()=>{
+                            this.classe = 'form-control'
+                            this.on = 'display: none'
+                        },10000)
+                    });
+                }
             }
         }
     }
