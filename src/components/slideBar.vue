@@ -18,7 +18,7 @@
             </router-link>
         </li>
         <li v-show="users.isAluno == 3">
-            <router-link to="/justificar" class="nav-link">
+            <router-link to="/solicitacaoJustificativa" class="nav-link">
                 <iconify-icon icon="line-md:email-opened-twotone-alt"></iconify-icon><strong>   Solicitações de justificativas</strong> 
             </router-link>
         </li>

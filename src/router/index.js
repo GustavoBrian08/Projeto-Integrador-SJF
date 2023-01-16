@@ -104,6 +104,30 @@ const routes = [{
                     }
                 })
             }
+    },{
+        path: '/solicitacaoJustificativa',
+        name: 'solicitacaoJustificativa',
+        component: () =>
+            import ( /* webpackChunkName: "about" */ '../views/SolicitacaoJustificativaView.vue'),
+            beforeEnter: (to, from, next) => {
+                onAuthStateChanged(auth, async (user) => {
+                    if (user !== null) {
+                        const email = user.email;
+                        const docRef = doc(db, "Usuarios", user.uid);
+                        const docSnap = await getDoc(docRef);
+                        console.log(docSnap.data().isAluno)
+                        if (docSnap.data().isAluno == 3){
+                            return next()
+                        }else{
+                            return next({name: 'home'})
+                        }
+                    }else{
+                        next({
+                            name: 'login'
+                        })
+                    }
+                })
+            }
     },
     {
         path: '/historico-de-justificativas',

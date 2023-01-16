@@ -176,13 +176,20 @@
     }
     #btnSolicitacao{
       flex-direction: row !important;
+      flex-wrap: wrap;
     }
     #btnSolicitacao button.btn-success{
+      margin-top: 2px !important;
       margin-bottom: 0 !important;
       margin-right: 4px !important;
     }
     #btnSolicitacao button.btn-danger{
+      margin-top: 2px !important;
       margin-bottom: 0 !important;
+      margin-left: 4px !important;
+    }
+    #btnSolicitacao button.btn-secondary{
+      margin-top: 2px !important;
       margin-left: 4px !important;
     }
     .visivel{
