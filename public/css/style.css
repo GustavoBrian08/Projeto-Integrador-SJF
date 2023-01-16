@@ -124,7 +124,13 @@
       width: 98%;
       margin-left: 10px;
     }
-    strong{
+    .dropdown strong{
+      display: none;
+    }
+    .nav strong{
+      display: none;
+    }
+    #nome {
       display: none;
     }
     .dropdown div{
@@ -162,7 +168,23 @@
         width: 100%;
         margin-left: 0;
     }
-    
+    #cardSolicitacao{
+      width: 100% !important;
+    }
+    #solicitacaoAluno{
+      flex-direction: column !important;
+    }
+    #btnSolicitacao{
+      flex-direction: row !important;
+    }
+    #btnSolicitacao button.btn-success{
+      margin-bottom: 0 !important;
+      margin-right: 4px !important;
+    }
+    #btnSolicitacao button.btn-danger{
+      margin-bottom: 0 !important;
+      margin-left: 4px !important;
+    }
     .visivel{
       display: none;
     }
@@ -248,7 +270,9 @@
     .ativado strong{
       display: block;
     }
-    
+    .ativado#nome {
+      display: block;
+    }
     .ativado .nav-pills {
       display: flex;
       padding: 5px;

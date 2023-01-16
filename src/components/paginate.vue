@@ -9,7 +9,7 @@
                         </thead>
                         <tbody class="overflow-auto table-group-divider">
                             <tr v-for="l in list" :key="l">
-                            <th scope="row"><i class="bi bi-search" aria-hidden="true"></i></th>
+                            <th style="cursor: pointer;" @click="pegarJustificativa(l.id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop" scope="row"><i  class="bi bi-search" aria-hidden="true"  ></i></th>
                             <td>{{l.id}}</td>
                             <td>{{l.assunto}}</td>
                             <td>{{user.nome}}</td>
@@ -20,6 +20,44 @@
                         </tbody>
                     </table>
                 </div>
+    </div>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Justificativa {{ justificativa.id }} </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex">
+                    <button type="button" @click="trocar()" v-show="documentos == false" class="btn btn-primary me-2">Documentos</button>
+                    <button type="button" @click="trocar()" v-show="documentos" class="btn btn-outline-secondary">Comentarios</button>
+                </div>
+                <div v-show="documentos" class="card">
+                    <div class="card-body">
+                        <div class="card mb-2 p-2" v-if="justificativa.situacao == 'Concluído'" >
+                           <h6 style="color: green;"><strong>Termo: Finalização do processo {{ justificativa.id }}</strong></h6>
+                            <br>
+                            <hr>
+                            <strong><p>Incluido por: {{ justificativa.responsavel }}</p></strong>
+                        </div>
+                        <div class="card mb-2 p-2">
+                            <h6 style="color: green;"><strong>Requerimento: Justificativa de faltas</strong></h6>
+                            <br>
+                            <hr>
+                            <strong><p>Incluido por: {{ user.nome }}</p></strong>
+                        </div>
+                    </div>
+                </div>
+                <div v-show="documentos == false" class="card">
+                    <h1>SEM COMENTÁRIOS NO MOMENTO</h1>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -45,7 +83,9 @@
                 idF: exibirTotalPage,
                 porPagina: '',
                 disable: false,
-                user: ''
+                user: '',
+                justificativa: [],
+                documentos: true
             }
         },
         methods:{
@@ -67,7 +107,18 @@
             goTo(number){
                 this.idF = number * exibirTotalPage
                 this.idI = this.idF - (exibirTotalPage - 1) 
-            }
+            },
+            pegarJustificativa(id){
+                this.justificativa = []
+                let valores = []
+                valores = this.list.filter((item) =>{
+                    return (item.id.indexOf(id) > - 1)
+            })
+            this.justificativa = valores[0]
+        },
+        trocar(){
+            this.documentos = !this.documentos
+        }
 
         },
         created(){
