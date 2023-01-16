@@ -1,7 +1,7 @@
 <template>
     <input type="submit" class="btn btn-success  mt-4 rounded-pill" value="Entrar">
     <router-link to="/cadastrar">
-            <input type="submit" class="btn btn-success  mt-3 rounded-pill" value="Cadastra-se">
+            <input type="submit" class="btn btn-success  mt-3 rounded-pill" value="Cadastrar-se">
     </router-link>
 </template>
 

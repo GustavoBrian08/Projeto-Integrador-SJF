@@ -4,7 +4,7 @@
       <div style="width:75vw; margin-left:25px;">
         <div class="d-flex justify-content-around mt-5" style="width: 95%;">
           <img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 50px;"> <h2 v-else> {{users.nome}}  ({{users.matricula}})</h2>
-            <button type="button" class="btn btn-primary">Editar senha</button>
+          <AlterarSenha />
         </div>
       </div>
       <h3 class="ms-4 mb-5 mt-3">Dados Gerais</h3>
@@ -47,11 +47,15 @@
  import app from './firebase/index'
 import { doc, getFirestore, onSnapshot  } from "firebase/firestore";
     import { getAuth, onAuthStateChanged } from "firebase/auth";
+    import AlterarSenha from "./AlterarSenha.vue"
     const db = getFirestore(app);
     const auth = getAuth();
     const user = auth.currentUser;
 export default {
     name: 'Home',
+    components: {
+      AlterarSenha
+    },
     data(){
       return{
         users:''
