@@ -31,7 +31,7 @@
               <td colspan="2" v-show="users.isAluno != 3"><strong>Curso: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><spam v-else >16MINF - Técnico em {{ users.turma }}</spam> </td>
             </tr>
             <tr>
-              <td colspan="2" v-show="users.isAluno == 3"><strong>Coordenação: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><spam v-else >Informática</spam> </td>
+              <td v-show="users.isAluno == 3"><strong>Coordenação: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><spam v-else >Informática</spam> </td>
             </tr>
             <tr>
               <td colspan="1" v-show="users.isAluno != 3"><strong>Periodo: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><spam v-else > {{ users.ingressou }}</spam> </td>

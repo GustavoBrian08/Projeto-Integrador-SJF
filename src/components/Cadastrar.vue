@@ -23,7 +23,7 @@
                 Nome deve ser maior que 3 caracteres.
               </div>
             </div>
-            <!-- <div>
+            <div>
               <label for="nome">Curso:</label>
               <select class="form-select" v-model="usuario.curso" aria-label="Default select example">
                 <option selected>Selecione seu curso</option>
@@ -31,7 +31,7 @@
                 <option value="2">Informática</option>
                 <option value="3">Vestuário</option>
               </select>
-            </div> -->
+            </div>
             <div>
               <label for="email">Email:</label>
               <input :class="validarCampos.email" @input="validarEmail()" v-model="usuario.email" type="email" required>
@@ -96,6 +96,7 @@
               matricula: '',
               nome: '',
               email: '',
+              curso:'Selecione seu curso',
               isAluno: 0,
               isValidado:false
 

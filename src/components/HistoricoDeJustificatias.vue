@@ -17,9 +17,9 @@
                         <label for="text">Situação:</label>
                         <select class="form-select form-select-L" @input="situacaoFiltrar" name="selected" id="selected">
                             <option value="Selecione uma situação" selected>Selecione uma situação</option>
-                            <option value="Andamento">Andamento</option>
+                            <option value="Pendente">Pendente</option>
                             <option value="Concluído">Concluído</option>
-                            <option value="Arquivado">Arquivado</option>
+                            <option value="Recusado">Recusado</option>
                         </select> <!-- form-contro-L é um media screen feito para ajustar o input para telas de <=544 -->
                     </div>
                 </div>
@@ -95,11 +95,11 @@ import paginate from '@/components/paginate.vue'
                 querySnapshot.forEach((doc) => {
                     let situacao
                     if(doc.data().situacao == 1) {
-                        situacao = 'Andamento'
+                        situacao = 'Pendente'
                     }else if(doc.data().situacao == 2){
                         situacao = 'Concluído'
                     }else if(doc.data().situacao == 3){
-                        situacao = 'Arquivado'
+                        situacao = 'Recusado'
                     }
                     justificativas.push({id: doc.id, assunto: doc.data().assunto, dataInicio: doc.data().dataInicio, situacao: situacao, responsavel: doc.data().responsavel});
                 });

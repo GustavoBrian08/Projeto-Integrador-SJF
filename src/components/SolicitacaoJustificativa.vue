@@ -12,9 +12,9 @@
                             <p>({{u.user.matricula}})</p>
                         </div>
                         <div id="btnSolicitacao" class="d-flex flex-column p-2">
-                            <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success mb-2">Aceitar</button>
+                            <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success mb-2" @click="pegarJustificativa(u.id)" >Aceitar</button>
                             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Recusar</button>
-                            <button class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop3" @click="aceitar(u.id)" >Ver mais</button>
+                            <button class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop3" @click="pegarJustificativa(u.id)" >Ver mais</button>
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
       </div>
       <div class="modal-body">
         <div v-for="user in userLogado" :key="user.id" class="form-check d-flex  align-items-center">
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <input class="form-check-input" type="checkbox" value="" @click="pegarIdProfessores(user.id)" id="flexCheckDefault">
         <label class="form-check-label" for="flexCheckDefault">
         </label>
         <div class="d-flex flex-column justify-content-center align-items-center">
@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success">Enviar</button>
+        <button type="button" class="btn btn-success" @click="aceitarJustificativa(idJustificativa)">Enviar</button>
       </div>
     </div>
   </div>
@@ -92,8 +92,8 @@
         </div>
         <div class="card-body d-flex flex-column mt-2">
             <label for="descricao">Arquivos anexados:</label>
-            <p  style="cursor: pointer; color: blue; margin: 5px;" v-for="anexo in justificativa.anexos" :key="anexo.id" class="form-control" @click="downloadAnexo(anexo)">{{ anexo.substr(47) }}</p>
-        </div>
+            <p  style="cursor: pointer; color: blue; margin: 5px;" v-for="anexo in justificativa.anexos" :key="anexo.id" class="form-control" @click="downloadAnexo(anexo.substr(47))">{{ anexo.substr(47) }}</p>
+          </div>
       </div>
     </div>
   </div>
@@ -104,8 +104,8 @@
 
 <script>
 import app from './firebase/index'
-import { doc, getFirestore, collection, getDocFromCache, collectionGroup, query,updateDoc, onSnapshot, deleteDoc, increment ,arrayUnion, where, getDocs, addDoc } from "firebase/firestore";
-import { getAuth, onAuthStateChanged, deleteUser  } from "firebase/auth";
+import { doc, getFirestore, collection, getDoc, collectionGroup, query, onSnapshot, where} from "firebase/firestore";
+import { getAuth  } from "firebase/auth";
 import { useRouter } from 'vue-router';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 const storage = getStorage();
@@ -125,17 +125,35 @@ const user = auth.currentUser;
                 users: [],
                 msg: '',
                 userLogado:[],
-                justificativa:''
+                justificativa:'',
+                link:'',
+                idJustificativa:'',
+                idProfessores: []
             }
         },
         methods:{
-            async aceitar(id){
+            async pegarJustificativa(id){
+              this.idJustificativa = id
+              console.log(id)
                 this.justificativa = []
                 let valores = []
                 valores = this.users.filter((item) =>{
                     return (item.id.indexOf(id) > - 1)
                 })
                 this.justificativa = valores[0].justificativa
+            },
+            pegarIdProfessores(id){
+              this.idProfessores.push(id)
+              console.log(this.idProfessores)
+            },
+            async aceitarJustificativa(id, userId){
+              console.log(this.idProfessores)
+              console.log(id)
+              console.log(userId)
+              // const userRef = doc(db, "Justificativas", id);
+              // await updateDoc(userRef, {
+              //       idProfessor: arrayUnion(userId)
+              //   });
             },
             async apagar(id){
                 
@@ -148,45 +166,35 @@ const user = auth.currentUser;
             },
             async pegarUsuario(id){
                 const docRef = doc(db, "Usuarios", id);
-                try {
-                const doc = await getDocFromCache(docRef);
-                return doc.data()
-                } catch (e) {
-                console.log("Error getting cached document:", e);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                  return docSnap.data()
+                } else {
+                  // doc.data() will be undefined in this case
+                  console.log("No such document!");
                 }
             },
             downloadAnexo(url){
-                getDownloadURL(ref(storage, url))
+              this.link = ''
+                getDownloadURL(ref(storage, `anexos/${url}`))
                 .then((url) => {
-                    // `url` is the download URL for 'images/stars.jpg'
-
-                    // This can be downloaded directly:
-                    const xhr = new XMLHttpRequest();
-                    xhr.responseType = 'blob';
-                    xhr.onload = (event) => {
-                    const blob = xhr.response;
-                    };
-                    xhr.open('GET', url);
-                    xhr.send();
-
-                    // Or inserted into an <img> element
-                    const img = document.getElementById('myimg');
-                    img.setAttribute('src', url);
+                    window.open(url, '_blank');
+                    
                 })
                 .catch((error) => {
+                  console.log(error)
                     // Handle any errors
                 });
             }
         },
         async created(){
+            console.log('created')
             const q = query(collectionGroup(db, "Justificativas"));
-            const unsubscribe = await onSnapshot( q,  (querySnapshot) => {
+            const unsubscribe = onSnapshot( q,  (querySnapshot) => {
             this.users = []
             querySnapshot.forEach(async (doc) => {
-
                 const user = await this.pegarUsuario(doc._document.key.path.segments[6])
                 this.users.push({user: user,id: doc.id, justificativa: doc.data()})
-                console.log(this.users)
             });
             });
             const q1 = query(collection(db, "Usuarios"), where ("isAluno" , "==", 1));
