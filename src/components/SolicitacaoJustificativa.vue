@@ -1,10 +1,10 @@
 <template>
     <div class="container d-flex justify-content-center align-items-center"> 
-        <div id="cardSolicitacao" class="card rounded p-2 w-75 shadow-sm">
-            <div class="d-flex flex-column card-body " style="max-height: 598px;">
-                <h3 class="mb-4 d-flex justify-content-center">Solicitações de Justificativas</h3>
-                <p class="alert alert-success" :style="success">Aluno aceito com sucesso!</p>
-                <p class="alert alert-danger" :style="danger">{{msg}}</p>
+      <div id="cardSolicitacao" class="card rounded p-2 w-75 shadow-sm">
+        <div class="d-flex flex-column card-body " style="max-height: 598px;">
+          <p class="alert alert-success" :style="success">{{ alerta }}</p>
+          <p class="alert alert-danger" :style="danger">{{ alerta }}</p>
+          <h3 class="mb-4 d-flex justify-content-center">Solicitações de Justificativas</h3>
                 <div class="card-body shadow-sm p-3 mb-5 bg-body rounded overflow-auto">
                     <div id="solicitacaoAluno" v-for="u in users" :key="u.id" v-show="!u.user.isValidado" class="card mb-2 d-flex flex-row justify-content-around align-items-center">
                         <div class="d-flex flex-column p-2">
@@ -12,9 +12,9 @@
                             <p>({{u.user.matricula}})</p>
                         </div>
                         <div id="btnSolicitacao" class="d-flex flex-column p-2">
-                            <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success mb-2" @click="pegarJustificativa(u.id)" >Aceitar</button>
-                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Recusar</button>
-                            <button class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop3" @click="pegarJustificativa(u.id)" >Ver mais</button>
+                            <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success mb-2" @click="pegarJustificativa(u.id, u.userID, u.user.nome)" >Aceitar</button>
+                            <button class="btn btn-danger" data-bs-toggle="modal" @click="pegarJustificativa(u.id, u.userID, u.user.nome)" data-bs-target="#staticBackdrop2">Recusar</button>
+                            <button class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop3" @click="pegarJustificativa(u.id, u.userID, u.user.nome)" >Ver mais</button>
                         </div>
                     </div>
                 </div>
@@ -27,11 +27,11 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Avisar sobre justificativas para os professores</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" @click="limparDados()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div v-for="user in userLogado" :key="user.id" class="form-check d-flex  align-items-center">
-        <input class="form-check-input" type="checkbox" value="" @click="pegarIdProfessores(user.id)" id="flexCheckDefault">
+        <input class="form-check-input" type="checkbox" value="" @click="pegarIdProfessores(user.id)" id="flexCheckDefault" unchecked>
         <label class="form-check-label" for="flexCheckDefault">
         </label>
         <div class="d-flex flex-column justify-content-center align-items-center">
@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" @click="aceitarJustificativa(idJustificativa)">Enviar</button>
+        <button type="button" class="btn btn-success" @click="aceitarJustificativa(idJustificativa)" data-bs-dismiss="modal">Enviar</button>
       </div>
     </div>
   </div>
@@ -53,15 +53,15 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Observação:</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" @click="limparDados()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="card">
-            <textarea class="form-control" id="" cols="30" rows="10"></textarea>
+            <textarea class="form-control" v-model="msg" id="" cols="30" rows="10"></textarea>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success">Enviar</button>
+        <button type="button" data-bs-dismiss="modal" @click="recusar()" class="btn btn-success">Enviar</button>
       </div>
     </div>
   </div>
@@ -71,8 +71,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Detalhes da justificativa:</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5 fw-bold" id="staticBackdropLabel">Detalhes da justificativa:</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" @click="limparDados()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="card d-flex flex-row justify-content-around">
@@ -87,12 +87,14 @@
             </div>
         </div>
         <div class="card-body mt-2">
-            <label for="descricao">Descrição:</label>
-            <p class="form-control">{{ justificativa.descricao }}</p>
+            <label class="fw-bold" for="descricao">Descrição:</label>
+            <p  v-if="justificativa.descricao" class="form-control">{{ justificativa.descricao }}</p>
+            <p  v-else class="fw-bold text-center"> Nenhuma descrição</p>
         </div>
         <div class="card-body d-flex flex-column mt-2">
-            <label for="descricao">Arquivos anexados:</label>
-            <p  style="cursor: pointer; color: blue; margin: 5px;" v-for="anexo in justificativa.anexos" :key="anexo.id" class="form-control" @click="downloadAnexo(anexo.substr(47))">{{ anexo.substr(47) }}</p>
+            <label class="fw-bold" for="descricao">Arquivos anexados:</label>
+            <p  id="linkAnexos" v-for="anexo in justificativa.anexos" :key="anexo.id" class="form-control fw-bold" @click="downloadAnexo(anexo.substr(47))" >{{ anexo.substr(47) }}</p>
+            <p class="fw-bold text-center" v-if="justificativa.anexos == 0">Sem Anexos</p>
           </div>
       </div>
     </div>
@@ -104,7 +106,7 @@
 
 <script>
 import app from './firebase/index'
-import { doc, getFirestore, collection, getDoc, collectionGroup, query, onSnapshot, where} from "firebase/firestore";
+import { doc, getFirestore, collection, getDoc, arrayUnion, updateDoc, collectionGroup, query, onSnapshot, where} from "firebase/firestore";
 import { getAuth  } from "firebase/auth";
 import { useRouter } from 'vue-router';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
@@ -128,13 +130,17 @@ const user = auth.currentUser;
                 justificativa:'',
                 link:'',
                 idJustificativa:'',
-                idProfessores: []
+                idProfessores: [],
+                idUsuario: '',
+                alerta:'',
+                nomeUsuario: ''
             }
         },
         methods:{
-            async pegarJustificativa(id){
+            async pegarJustificativa(id, userID, nome){
+              this.nomeUsuario = nome
               this.idJustificativa = id
-              console.log(id)
+              this.idUsuario = userID
                 this.justificativa = []
                 let valores = []
                 valores = this.users.filter((item) =>{
@@ -143,20 +149,65 @@ const user = auth.currentUser;
                 this.justificativa = valores[0].justificativa
             },
             pegarIdProfessores(id){
-              this.idProfessores.push(id)
-              console.log(this.idProfessores)
+              if (!this.idProfessores.includes(id)){
+                this.idProfessores.push(id)
+              }else{
+                let indice = this.idProfessores.indexOf(id);
+                while(indice >= 0){
+                  this.idProfessores.splice(indice, 1);
+                    indice = this.idProfessores.indexOf(id);
+                }
+              }
             },
-            async aceitarJustificativa(id, userId){
-              console.log(this.idProfessores)
-              console.log(id)
-              console.log(userId)
-              // const userRef = doc(db, "Justificativas", id);
-              // await updateDoc(userRef, {
-              //       idProfessor: arrayUnion(userId)
-              //   });
+            async aceitarJustificativa(id){   
+              if (this.idProfessores.length == 0){
+                this.danger = 'display: block'
+                this.alerta = 'Você tem que marcar pelo menos 1 professor'
+              }else{
+                this.success = 'display: block'
+                this.alerta = `Justificativa ${id} aceita com sucesso!`
+                const userRef = doc(db,`Usuarios/${this.idUsuario}/Justificativas/${id}`)
+                for (let i in this.idProfessores){
+                  await updateDoc(userRef, {
+                        nome: this.nomeUsuario,
+                        situacao: 2,
+                        idProfessor: arrayUnion(this.idProfessores[i])
+                    });
+                }
+              }
+              setTimeout(()=>{
+                this.danger = 'display: none'
+                this.success = 'display: none'
+              },5000)
+              this.limparDados()
             },
-            async apagar(id){
-                
+            limparDados(){
+              const elem = document.querySelectorAll('#flexCheckDefault')
+              for (let i in elem){
+                if (elem[i].checked)
+                {
+                    elem[i].checked = false
+                }
+              }
+              this.idProfessores = []
+              this.msg = ''
+              this.idJustificativa = ''
+              this.idUsuario = ''
+              this.justificativa = []
+            },
+            async recusar(){
+              this.success = 'display: block'
+              this.alerta = `Justificativa ${this.idJustificativa} recusada.`
+              const userRef = doc(db,`Usuarios/${this.idUsuario}/Justificativas/${this.idJustificativa}`)
+              await updateDoc(userRef, {
+                nome: this.nomeUsuario,
+                situacao: 3,
+                mensagem: this.msg
+              });
+              setTimeout(()=>{
+                this.success = 'display: none'
+              },5000)
+              this.limparDados()
             },
             unsubscribe(){
                 onSnapshot(collection(db, "Usuarios"), () => {
@@ -189,12 +240,12 @@ const user = auth.currentUser;
         },
         async created(){
             console.log('created')
-            const q = query(collectionGroup(db, "Justificativas"));
+            const q = query(collectionGroup(db, "Justificativas"),where('situacao', '==', 1));
             const unsubscribe = onSnapshot( q,  (querySnapshot) => {
             this.users = []
             querySnapshot.forEach(async (doc) => {
                 const user = await this.pegarUsuario(doc._document.key.path.segments[6])
-                this.users.push({user: user,id: doc.id, justificativa: doc.data()})
+                this.users.push({userID: doc._document.key.path.segments[6],user: user,id: doc.id, justificativa: doc.data()})
             });
             });
             const q1 = query(collection(db, "Usuarios"), where ("isAluno" , "==", 1));

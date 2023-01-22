@@ -164,6 +164,7 @@ const listRef = ref(storage, 'anexos/');
                     const email = user.email;
                     this.email = email
                     this.id = user.uid
+                    console.log(user)
                 }
                 });
         }

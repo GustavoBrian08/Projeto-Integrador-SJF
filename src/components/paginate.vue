@@ -1,7 +1,7 @@
 <template>
     <div class="overflow-auto" style="background-color: #fff;">
-        <div class="table-L" >
-            <table class="table overflow-auto table-striped table-bordered table-hover">
+        <div class="table-L" id="historico-paginate" >
+            <table  class="table overflow-auto table-striped table-bordered table-hover">
                         <thead>
                             <tr >
                             <th scope="col" v-for="h in headrs" :key="h">{{h}}</th>
@@ -12,7 +12,8 @@
                             <th style="cursor: pointer;" @click="pegarJustificativa(l.id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop" scope="row"><i  class="bi bi-search" aria-hidden="true"  ></i></th>
                             <td>{{l.id}}</td>
                             <td>{{l.assunto}}</td>
-                            <td>{{user.nome}}</td>
+                            <td v-if="l.nome">{{l.nome}}</td>
+                            <td v-else>{{user.nome}}</td>
                             <td>{{l.dataInicio}}</td>
                             <td>{{l.situacao}}</td>
                             <td>{{l.responsavel}}</td>
@@ -49,8 +50,9 @@
                         </div>
                     </div>
                 </div>
-                <div v-show="documentos == false" class="card">
-                    <h1>SEM COMENTÁRIOS NO MOMENTO</h1>
+                <div v-show="documentos == false" class="card p-4">
+                    <h6 v-if="justificativa.mensagem">{{ justificativa.mensagem }}</h6>
+                    <h3 v-else>SEM COMENTÁRIOS NO MOMENTO</h3>
                 </div>
             </div>
             <div class="modal-footer">

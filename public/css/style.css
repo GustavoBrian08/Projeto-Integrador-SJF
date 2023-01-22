@@ -8,6 +8,9 @@
     margin-left: 10px;
     margin-top: 24px;
 }
+#historico-paginate{
+  height: 400px !important;
+}
 .visivel{
   display: block;
 }
@@ -112,6 +115,16 @@
     color: dodgerblue;
 }
 
+#linkAnexos{
+  cursor: pointer;
+  color: rgb(0, 68, 255);
+  margin: 5px;
+  transition: 0.5 ease-in-out;
+}
+#linkAnexos:hover{
+  color: rgb(5, 5, 128);
+  opacity: 75%;
+}
 
 @media screen and (max-width: 1024px) {
     .responsive{
@@ -177,20 +190,19 @@
     #btnSolicitacao{
       flex-direction: row !important;
       flex-wrap: wrap;
+      justify-content: space-around;
     }
     #btnSolicitacao button.btn-success{
-      margin-top: 2px !important;
-      margin-bottom: 0 !important;
-      margin-right: 4px !important;
+      margin: 0 !important;
+      margin-top: 5px !important;
     }
     #btnSolicitacao button.btn-danger{
-      margin-top: 2px !important;
-      margin-bottom: 0 !important;
-      margin-left: 4px !important;
+      margin: 0 !important;
+      margin-top: 5px !important;
     }
     #btnSolicitacao button.btn-secondary{
-      margin-top: 2px !important;
-      margin-left: 4px !important;
+      margin: 0 !important;
+      margin-top: 5px !important;
     }
     .visivel{
       display: none;
@@ -403,4 +415,5 @@
     .tela-600{
       max-height: 320px; min-height: 300px; overflow-y: auto;
     }
+    
   }
