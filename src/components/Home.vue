@@ -68,7 +68,15 @@ export default {
                   const usuario = onSnapshot(doc(db, "Usuarios", user.uid), (doc) => {
                       this.users = doc.data()
                       let ingressou = this.users.matricula.substr(0,4)
-                      this.users = {nome: this.users.nome, matricula: this.users.matricula, email: this.users.email, turma: this.users.turma, ingressou: ingressou, isAluno: this.users.isAluno}
+                      let situacao
+                        if(doc.data().curso == '1') {
+                            situacao = 'Administração'
+                        }else if(doc.data().curso == '2'){
+                            situacao = 'Informática'
+                        }else if(doc.data().curso == '3'){
+                            situacao = 'Vestuário'
+                        }
+                      this.users = {nome: this.users.nome, matricula: this.users.matricula, email: this.users.email, turma: situacao, ingressou: ingressou, isAluno: this.users.isAluno}
                   });
               }
               });
