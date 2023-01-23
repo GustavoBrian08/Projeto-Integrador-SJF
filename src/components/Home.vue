@@ -17,18 +17,18 @@
           <tbody class="table-group-divider">
             <tr>  
               <td><strong>Nome: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"> <span v-else >{{users.nome}}</span></td>
-              <td v-show="users.isAluno != 3"><strong>Situação: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><span v-else class="card-body situacao">Matriculado</span></td>
+              <td v-show="users.isAluno == 2"><strong>Situação: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><span v-else class="card-body situacao">Matriculado</span></td>
             </tr>
             <tr>
               <td><strong>Matricula: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;">
                  {{users.matricula}}</td>
-              <td v-show="users.isAluno != 3"><strong>Ingressou: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><span v-else >{{ users.ingressou }}/2</span></td>
+              <td v-show="users.isAluno == 2"><strong>Ingressou: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><span v-else >{{ users.ingressou }}/2</span></td>
             </tr>
             <tr>
               <td colspan="2"><strong>Email: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"> <span v-else >{{users.email}}</span></td>
             </tr>
             <tr>
-              <td colspan="2" v-show="users.isAluno != 3"><strong>Curso: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><spam v-else >16MINF - Técnico em {{ users.turma }}</spam> </td>
+              <td colspan="2" v-show="users.isAluno == 2"><strong>Curso: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><spam v-else >16MINF - Técnico em {{ users.turma }}</spam> </td>
             </tr>
             <tr>
               <td v-show="users.isAluno == 3"><strong>Coordenação: </strong><img v-if="!users.nome" src="http://portal.ufvjm.edu.br/a-universidade/cursos/grade_curricular_ckan/loading.gif/@@images/image.gif" style="width: 40px;"><spam v-else >Informática</spam> </td>

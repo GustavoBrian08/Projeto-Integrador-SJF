@@ -93,7 +93,9 @@
         </div>
         <div class="card-body d-flex flex-column mt-2">
             <label class="fw-bold" for="descricao">Arquivos anexados:</label>
-            <p  id="linkAnexos" v-for="anexo in justificativa.anexos" :key="anexo.id" class="form-control fw-bold" @click="downloadAnexo(anexo.substr(47))" >{{ anexo.substr(47) }}</p>
+            <p  id="linkAnexos" v-for="anexo in justificativa.anexos" :key="anexo.id" class="form-control fw-bold"  >
+            <small @click="downloadAnexo(anexo.substr(47))">{{ anexo.substr(47) }}</small>
+            </p>
             <p class="fw-bold text-center" v-if="justificativa.anexos == 0">Sem Anexos</p>
           </div>
       </div>
@@ -138,6 +140,7 @@ const user = auth.currentUser;
         },
         methods:{
             async pegarJustificativa(id, userID, nome){
+              console.log(this.users)
               this.nomeUsuario = nome
               this.idJustificativa = id
               this.idUsuario = userID
@@ -216,6 +219,7 @@ const user = auth.currentUser;
                 });
             },
             async pegarUsuario(id){
+              
                 const docRef = doc(db, "Usuarios", id);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
@@ -227,6 +231,7 @@ const user = auth.currentUser;
             },
             downloadAnexo(url){
               this.link = ''
+              console.log(url)
                 getDownloadURL(ref(storage, `anexos/${url}`))
                 .then((url) => {
                     window.open(url, '_blank');
@@ -239,7 +244,6 @@ const user = auth.currentUser;
             }
         },
         async created(){
-            console.log('created')
             const q = query(collectionGroup(db, "Justificativas"),where('situacao', '==', 1));
             const unsubscribe = onSnapshot( q,  (querySnapshot) => {
             this.users = []
@@ -247,7 +251,8 @@ const user = auth.currentUser;
                 const user = await this.pegarUsuario(doc._document.key.path.segments[6])
                 this.users.push({userID: doc._document.key.path.segments[6],user: user,id: doc.id, justificativa: doc.data()})
             });
-            });
+          });
+          
             const q1 = query(collection(db, "Usuarios"), where ("isAluno" , "==", 1));
             await onSnapshot( q1,  (querySnapshot) => {
                 this.userLogado = []

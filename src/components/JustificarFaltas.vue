@@ -97,16 +97,19 @@ const listRef = ref(storage, 'anexos/');
                     this.danger = 'display: none'
                 },10000)
             }
-            if (this.dataInicio.length !=0 && this.dataFim.length != 0 && this.desc.length != 0 && this.anexo == 0 || this.desc.length == 0 && this.anexo != 0 && this.dataInicio < this.dataFim){
+            if (this.dataInicio.length !=0 && this.dataFim.length != 0 && this.desc.length != 0 && this.anexo != 0  && this.dataInicio <= this.dataFim || this.desc.length == 0 && this.anexo != 0 || this.desc.length != 0 && this.anexo == 0){
                 this.loading = 'display: block'
                 this.atestados = []
                 // fazendo upload de todos arquivos anexados
+                console.log(this.file)
                 for (let i = 0; i < this.file.length ; i++){
-                    this.atestados.push(`${this.storageRef}`)
+                    console.log()
+                    this.atestados.push(`gs://sjf-projeto-integrador.appspot.com/anexos/${this.storageRef[i]._location.path_.substr(7)}`)
                     uploadBytes(this.storageRef[i], this.file[i]).then((snapshot) => {
                         //rererwr
                     });
                 }
+                console.log(this.atestados)
                 // pegando o id do usuario que está logado para adicionar a justificativa de falta que foi feita agora
                 const userRef = doc(db, "Usuarios", this.id);
                 const docRef = await addDoc(collection(userRef, "Justificativas"), {assunto: 'Justificativa', situacao: 1, responsavel: 'Coordenador',descricao: this.desc,dataInicio: this.dataInicio, dataFinal: this.dataFim,anexos: this.atestados});
@@ -164,7 +167,6 @@ const listRef = ref(storage, 'anexos/');
                     const email = user.email;
                     this.email = email
                     this.id = user.uid
-                    console.log(user)
                 }
                 });
         }

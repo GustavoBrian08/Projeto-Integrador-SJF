@@ -1,7 +1,7 @@
 <template> 
     <div class="over bg-white bloco p-3" >
         <div class="d-flex flex-column mb-3">
-            <h3>Processos:</h3>
+            <h3>Justificativas dos Alunos:</h3>
             <div class="mb-4">
                 <p>Filtros:</p>
                 <div class="d-flex responsive bg-secondary bg-opacity-25 p-4 rounded flex-wrap">
@@ -99,7 +99,7 @@ import paginate from '@/components/paginate.vue'
           onAuthStateChanged(auth, async (user) => {
               if (user !== null) {
                 const usuario = await this.pegarUsuario(user.uid)
-                if (usuario.isAluno != 2){
+                if (usuario.isAluno == 1){
                     const q = query(collectionGroup(db, "Justificativas"));
                     const unsubscribe = onSnapshot( q,  (querySnapshot) => {
                     const justificativas = [];
@@ -119,6 +119,24 @@ import paginate from '@/components/paginate.vue'
                         }catch(e){
 
                         }
+                    });
+                    this.list = justificativas
+                    this.list1 = justificativas
+                    });
+                }else if(usuario.isAluno == 3){
+                    const q = query(collectionGroup(db, "Justificativas"));
+                    const unsubscribe = onSnapshot( q,  (querySnapshot) => {
+                    const justificativas = [];
+                    querySnapshot.forEach(async (doc) => {
+                        let situacao
+                        if(doc.data().situacao == 1) {
+                            situacao = 'Pendente'
+                        }else if(doc.data().situacao == 2){
+                            situacao = 'Concluído'
+                        }else if(doc.data().situacao == 3){
+                            situacao = 'Recusado'
+                        }
+                        justificativas.push({id: doc.id, mensagem: doc.data().mensagem, nome: doc.data().nome, assunto: doc.data().assunto, dataInicio: doc.data().dataInicio, situacao: situacao, responsavel: doc.data().responsavel});
                     });
                     this.list = justificativas
                     this.list1 = justificativas

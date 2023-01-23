@@ -46,7 +46,7 @@
                             <h6 style="color: green;"><strong>Requerimento: Justificativa de faltas</strong></h6>
                             <br>
                             <hr>
-                            <strong><p>Incluido por: {{ user.nome }}</p></strong>
+                            <strong><p>Incluido por: {{ justificativa.nome }}</p></strong>
                         </div>
                     </div>
                 </div>

@@ -32,7 +32,7 @@
                 <iconify-icon icon="line-md:account"></iconify-icon><strong>   Solicitações de professores</strong> 
             </router-link>
         </li>
-        <li v-show="users.isAluno != 3">
+        <li v-show="users.isAluno == 2">
             <router-link to="/justificar" class="nav-link">
                 <iconify-icon icon="line-md:clipboard-list"></iconify-icon><strong>   Justificar falta</strong> 
             </router-link>
@@ -43,8 +43,8 @@
         </router-link>
         </li>
         <li v-show="users.isAluno == 3">
-            <router-link to="/historico-de-justificativas" class="nav-link">
-                <iconify-icon icon="line-md:image-twotone"></iconify-icon><strong>   Criar turma</strong>  
+            <router-link to="/turma" class="nav-link">
+                <iconify-icon icon="line-md:image-twotone"></iconify-icon><strong>   Turma</strong>  
             </router-link>
         </li>
         <li>
