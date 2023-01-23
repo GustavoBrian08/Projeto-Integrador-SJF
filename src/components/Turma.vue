@@ -1,13 +1,15 @@
 <template>
+  <div class="d-flex w-100 flex-row-reverse justify-content-center align-items-center p-3">
+    <a href="" data-bs-toggle="modal" class="btn btn-primary align-self-start" data-bs-target="#staticBackdrop">Criar Turma</a>
     <div class="container d-flex justify-content-center align-items-center"> 
-        <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Criar Turma</a>
-        <div v-for="list in listaTurma" :key="list.id" @click="pegarID(list.id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop1" class="card rounded p-2 m-3" style="cursor: pointer;">
+        <div v-for="list in listaTurma" :key="list.id" @click="pegarID(list.id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop1" class="card rounded p-2 m-3 turma" style="cursor: pointer;">
             <div class="d-flex flex-column card-body">  
-                <p>{{ list.turma.nome }}</p>
-                <p>{{ list.turma.modulo }} modulo</p>
+                <h5>{{ list.turma.nome }}</h5>
+                <p>{{ list.turma.modulo }} Módulo</p>
             </div>
         </div>
     </div>
+  </div>
 
 <!-- modal de criar turma -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -34,7 +36,7 @@
 </div>
 <!-- fim do modal de criar turma -->
 <!-- modal de adicionar professor e aluno -->
-<div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal modal-lg fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -43,24 +45,24 @@
       </div>
       <div class="modal-body">
         <form>
-            <label for="nome">Adicionar professores:</label>
-            <div class="d-flex card mt-2 flex-column justify-content-around">
-                <span class="ms-2" v-for="professor in profAll" :key="professor.id" v-show="!professor.user.turma">{{ professor.user.nome }} ({{ professor.user.matricula }}) <button @click.prevent="adicionar(professor.id)" class="btn btn-primary m-2">Adicionar</button></span>
+            <label class="my-2" for="nome"><h4>Adicionar professores:</h4></label>
+            <div class="d-flex card mt-2 flex-column justify-content-around" style="overflow-y: scroll;">
+                <span class="ms-2" v-for="professor in profAll" :key="professor.id" v-show="!professor.user.turma"><span class="d-flex justify-content-between align-items-center">{{ professor.user.nome }} ({{ professor.user.matricula }}) <button @click.prevent="adicionar(professor.id)" class="btn btn-primary m-2">Adicionar</button></span></span>
             </div>
-            <label for="modulo">Adicionar alunos</label>
-            <div class="d-flex card mt-2 flex-column justify-content-around">
-                <span class="ms-2" v-for="aluno in alunoAll" :key="aluno.id" v-show="!aluno.user.turma">{{ aluno.user.nome }} ({{ aluno.user.matricula }}) <button @click.prevent="adicionar(aluno.id)" class="btn btn-primary m-2">Adicionar</button></span>
+            <label class="my-2" for="modulo"><h4>Adicionar alunos:</h4></label>
+            <div class="d-flex card mt-2 flex-column justify-content-around" style="overflow-y: scroll;">
+                <span class="ms-2" v-for="aluno in alunoAll" :key="aluno.id" v-show="!aluno.user.turma"><span class="d-flex justify-content-between align-items-center">{{ aluno.user.nome }} ({{ aluno.user.matricula }}) <button @click.prevent="adicionar(aluno.id)" class="btn btn-primary m-2">Adicionar</button></span></span>
             </div>
         </form>
-        <label for="modulo">Professores na turma</label>
-        <hr>
-            <div class="d-flex card mt-2 flex-column justify-content-around">
-                <span class="ms-2" v-for="professor in profAll" :key="professor.id" v-show="professor.user.turma == idTurma">{{ professor.user.nome }} ({{ professor.user.matricula }}) <button @click.prevent="remover(professor.id)" class="btn btn-danger m-2">Remover</button></span>
+        <label class="my-2" for="modulo"><h5>Professores na turma:</h5></label>
+        
+            <div class="d-flex card mt-2 flex-column justify-content-around" style="overflow-y: scroll;">
+                <ul class="ms-2" v-for="professor in profAll" :key="professor.id" v-show="professor.user.turma == idTurma"><li><span class="d-flex justify-content-between align-items-center">{{ professor.user.nome }} ({{ professor.user.matricula }}) <button @click.prevent="remover(professor.id)" class="btn btn-danger m-2">Remover</button></span></li></ul>
             </div>
-        <label for="modulo">Alunos na turma</label>
-        <hr>
-        <div class="d-flex card mt-2 flex-column justify-content-around">
-                <span class="ms-2" v-for="aluno in alunoAll" :key="aluno.id" v-show="aluno.user.turma == idTurma">{{ aluno.user.nome }} ({{ aluno.user.matricula }}) <button @click.prevent="remover(aluno.id)" class="btn btn-danger m-2">Remover</button></span>
+        <label class="my-2" for="modulo"><h5>Alunos na turma:</h5></label>
+        
+        <div class="d-flex card mt-2 flex-column justify-content-around" style="overflow-y: scroll;">
+                <ul class="ms-2" v-for="aluno in alunoAll" :key="aluno.id" v-show="aluno.user.turma == idTurma"><li><span class="d-flex justify-content-between align-items-center">{{ aluno.user.nome }} ({{ aluno.user.matricula }}) <button @click.prevent="remover(aluno.id)" class="btn btn-danger m-2">Remover</button></span></li></ul>
             </div>
       </div>
       <div class="d-flex d-flex justify-content-between modal-footer">
@@ -177,6 +179,7 @@ const user = auth.currentUser;
                 nome: this.turma.nome,
                 modulo: this.turma.modulo
               });
+              window.location.reload()
            }
         },
        async created(){
@@ -221,3 +224,12 @@ const user = auth.currentUser;
     }
 </script>
 
+<style>
+
+.turma:hover {
+  transition: .3s;
+  scale: 1.02;
+  box-shadow: 0px 0px 20px 1px rgb(0 0 0 / 24%);
+}
+
+</style>
