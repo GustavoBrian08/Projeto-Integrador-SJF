@@ -150,9 +150,16 @@ const user = auth.currentUser;
            },
            async excluir(){
             for(let i in this.alunoAll) {
-                console.log(this.alunoAll[i].user.turma)
                 if (this.alunoAll[i].user.turma == this.idTurma){
                     const userRef = doc(db,`Usuarios/${this.alunoAll[i].id}`)
+                    await updateDoc(userRef, {
+                        turma: deleteField()
+                    });
+                }
+            }
+            for(let i in this.profAll) {
+                if (this.profAll[i].user.turma == this.idTurma){
+                    const userRef = doc(db,`Usuarios/${this.profAll[i].id}`)
                     await updateDoc(userRef, {
                         turma: deleteField()
                     });
